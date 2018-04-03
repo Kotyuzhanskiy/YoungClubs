@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for
-from controllers.forms import SearchForm
-from search import search
+from app.controllers.forms import SearchForm
+from app.models.search import search
 
 def index():
     # TO DO
