@@ -1,11 +1,12 @@
 {% extends "guestbase.html" %}
 
 {% block content %}
-    <h1>Hi, {{ user.username }}!</h1>
+    <h1>Привет, Team-2!</h1>
     <form action="" method="post">
         {{ form.hidden_tag() }}
         <p>
-            {{ form.search }}<br>
+            {{ form.search.label }}<br>
+            {{ form.search(size=32) }}<br>
             {% for error in form.search.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
