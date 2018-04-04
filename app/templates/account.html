@@ -1,11 +1,5 @@
 {% extends "userbase.html" %}
 
 {% block content %}
-    <h1>Здравствуйте, {{ user.username }}</h1>
-    <hr>
-    {% for club in clubs %}
-    <p>
-    {{ club }}
-    </p>
-    {% endfor %}
+    <h1>Личный кабинет. Управление кружками пользователя</h1>
 {% endblock %}
