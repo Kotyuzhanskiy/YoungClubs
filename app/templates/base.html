@@ -10,18 +10,11 @@
         <div>
         <a href="{{ url_for('index') }}">Родителям</a>
         <a href="{{ url_for('login') }}">Учреждениям</a>
-        {% if current_user.is_anonymous %}
-        {% else %}
+        {% if current_user.is_anonymous == false %}
         <a href="{{ url_for('logout') }}">Выйти</a>
+        {% else %}
         {% endif %}
         </div>
-        <form action="" method="post">
-        {{ cityform.hidden_tag() }}
-        <p>
-            {{ cityform.city.label }} {{ cityform.city }}
-        </p>
-        </form>
-
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>

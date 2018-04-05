@@ -1,1 +1,12 @@
-kjndn
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Страница добавления кружка</h1>
+        <form action="" method="post">
+            <p>Заполните форму для Вашего кружка </p>
+                {{ form.hidden_tag() }}
+                {% for field in form %}
+                    {% if field.widget.input_type != 'hidden' %} {{ field.label }} {% endif %} {{ field }}<br>
+                {% endfor %}
+        </form>
+{% endblock %}

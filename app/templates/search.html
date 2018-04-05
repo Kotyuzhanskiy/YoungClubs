@@ -1,5 +1,12 @@
-{% extends "guestbase.html" %}
+{% extends "base.html" %}
 
 {% block content %}
     <h1>Результаты поиска учреждений</h1>
-{% endblock %}
+        <form action="" method="post">
+            <p>Выберите нужные элементы для поиска</p>
+                {{ form.hidden_tag() }}
+                {% for field in form %}
+                    {% if field.widget.input_type != 'hidden' %} {{ field.label }} {% endif %} {{ field }}<br>
+                {% endfor %}
+        </form>
+{% endblock %}{{ field.label }}

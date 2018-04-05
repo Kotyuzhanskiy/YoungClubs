@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from app import app
-from app.controllers.forms import LoginForm, SearchForm
+from app.controllers.forms import LoginForm, SearchForm, SignUpForm, AdvancedSearchForm, AddClubForm, CityForm
+from flask_login import current_user, login_user, login_required, logout_user
+from werkzeug.urls import url_parse
+from app.models.models import User
+from app import db
 
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
@@ -10,116 +14,71 @@ def index():
     form = SearchForm()
     if form.validate_on_submit():
         return redirect(url_for('search'))
-    return render_template('index.html', title='Welcome', form=form)
+    cityform = CityForm()
+    return render_template('index.html', title='Welcome', form=form, cityform=cityform)
+
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     # TO DO
     flash('Search for sucsessful')
-    return render_template('search.html', title='Результаты поиска учреждений')
+    form = AdvancedSearchForm()
+    cityform = CityForm()
+    return render_template('search.html', title='Результаты поиска учреждений', form=form, cityform=cityform)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # TO DO
-    #form = LoginForm()
-    #if form.validate_on_submit():
-    #    flash('Login requested for user {}, remember_me={}'.format(
-    #        form.username.data, form.remember_me.data))
-    #    return redirect(url_for('account'))
-    #return render_template('login.html', title='Войти', form=form)
- 
- # Forget any user_id
-    session.clear()
+    if current_user.is_authenticated:
+        return redirect(url_for('account', username=current_user.username))
+    form = LoginForm()
+    cityform = CityForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Неправильный пароль или логин')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('account', username=current_user.username)
+        return redirect(next_page)
+    return render_template('login.html', title='Войти', form=form, cityform=cityform)
 
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-        # Ensure username was submitted
-        Name = request.form.get("Name")
-        pass_word = request.form.get("password")
-        if not Name:
-            return apology("must provide username", 403)
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
-        # Ensure password was submitted
-        elif not pass_word:
-            return apology("must provide password", 403)
-
-        # Query database for username
-        rows = db.execute("SELECT * FROM user WHERE Name = :Name", Name=Name)
-
-        # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["password_hash"], pass_word):
-            return apology("invalid username and/or password", 403)
-
-        # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
-
-        # Redirect user to home page
-        return redirect("/")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("login.html")    
-
-@app.route('/account', methods=['GET', 'POST'])
-def account():
+#@app.route('/account', methods=['GET', 'POST'])
+#@login_required
+#def account():
     #TO DO
+#    return render_template('account.html', title='Управление кружками пользователя')
+
+@app.route('/account/<username>')
+@login_required
+def account(username):
+    user = User.query.filter_by(username=username).first_or_404()
     return render_template('account.html', title='Управление кружками пользователя')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    # TO DO
-    #return render_template('signup.html', title='Зарегистрироваться')
+    if current_user.is_authenticated:
+        return redirect(url_for('account', username=current_user.username))
+    form = SignUpForm()
+    cityform = CityForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        return redirect(url_for('account', username=current_user.username))
+    return render_template('signup.html', title='Зарегистрироваться', form=form, cityform=cityform)
 
-    # Forget any user_id
-    session.clear()
-
-    # User reached route via POST (as by submitting a form via POST)
-    if request.method == "POST":
-        Name = request.form.get("Name")
-        PatronymicNname = request.form.get("PatronymicNname")
-        SurName = request.form.get("SurName")
-        pass_word = request.form.get("password")
-        email = request.form.get("email")
-
-        # Ensure username was submitted
-        if not Name:
-            return apology("must provide username", 400)
-
-        # Ensure password was submitted
-        elif not pass_word:
-            return apology("must provide password", 400)
-
-        # Ensure e-mail was submitted
-        elif not email:
-            return apology("must provide email", 400)
-
-     #   if len(pass_word) < 6:
-     #       return apology("lenght of password < 6", 400)
-     #   if not pass_word.isalnum():
-     #       return apology("password doesn't consist only letters or numbers", 400)
-
-        if pass_word != request.form.get("confirmation"):
-            return apology("passwords don't match", 400)
-
-       # Query database for username
-        password_hash = generate_password_hash(pass_word, method='pbkdf2:sha256', salt_length=8)
-        rows = db.execute("INSERT INTO user (Name, PatronymicNname, SurName, email, password_hash) VALUES (:Name, :PatronymicNname, :SurName, :email, :password_hash)",
-                           Name=Name, PatronymicNname=PatronymicNname, SurName=SurName, email=email, password_hash=password_hash)
-        if not rows:
-            return apology("username already exist. try again.", 400)
-
-#   !!!  E MAIL  !!!
-        message = "You are registered!"
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login("youngclubs2018@gmail.com", ">ysqRke,")
-        #(from, to, message)
-        server.sendmail("youngclubs2018@gmail.com", email, message)
-
-        # Redirect user to home page
-        return redirect("/login")
-
-    # User reached route via GET (as by clicking a link or via redirect)
-    else:
-        return render_template("register.html")    
-
+@app.route('/addclub', methods=['GET', 'POST'])
+@login_required
+def addclub():
+    #TO DO
+    form = AddClubForm()
+    return render_template('addclub.html', title='Добавление нового кружка', form=form)

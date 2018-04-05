@@ -1,5 +1,9 @@
-{% extends "userbase.html" %}
+{% extends "base.html" %}
 
 {% block content %}
-    <h1>Личный кабинет. Управление кружками пользователя</h1>
+    <h1>Здравствуйте {{ current_user.username }}! </h1>
+    <h2>Это Ваш кабинет пользователя. Здесь находятся кружки, которыми Вы управляете</h2>
+    <form action="{{ url_for('addclub') }}">
+        <button type="submit">Добавить кружок</button>
+    </form>
 {% endblock %}
