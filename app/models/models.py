@@ -14,9 +14,13 @@ class User(UserMixin, db.Model):
         return '<User {}>'.format(self.username)
 
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        password_hash = generate_password_hash(password)
+        self.password_hash = password_hash[20:]
+
 
     def check_password(self, password):
+        hash_m = 'pbkdf2:sha256:50000$'
+        self.password_hash = hash_m + self.password_hash
         return check_password_hash(self.password_hash, password)
 
 
