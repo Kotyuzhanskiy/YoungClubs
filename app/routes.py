@@ -29,9 +29,8 @@ def search():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('account', username=current_user.username))
+        return redirect(url_for('account'))
     form = LoginForm()
-    cityform = CityForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
@@ -40,41 +39,34 @@ def login():
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('account', username=current_user.username)
+            next_page = url_for('account')
         return redirect(next_page)
-    return render_template('login.html', title='Войти', form=form, cityform=cityform)
+    return render_template('login.html', title='Войти', form=form)
 
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
-#@app.route('/account', methods=['GET', 'POST'])
-#@login_required
-#def account():
-    #TO DO
-#    return render_template('account.html', title='Управление кружками пользователя')
-
-@app.route('/account/<username>')
+@app.route('/account', methods=['GET', 'POST'])
 @login_required
-def account(username):
-    user = User.query.filter_by(username=username).first_or_404()
+def account():
+    #TO DO
     return render_template('account.html', title='Управление кружками пользователя')
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
-        return redirect(url_for('account', username=current_user.username))
+        return redirect(url_for('account'))
     form = SignUpForm()
-    cityform = CityForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         login_user(user)
-        return redirect(url_for('account', username=current_user.username))
-    return render_template('signup.html', title='Зарегистрироваться', form=form, cityform=cityform)
+        return redirect(url_for('account'))
+    return render_template('signup.html', title='Зарегистрироваться', form=form)
 
 @app.route('/addclub', methods=['GET', 'POST'])
 @login_required
