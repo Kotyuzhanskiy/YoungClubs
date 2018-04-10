@@ -7,6 +7,13 @@ from werkzeug.urls import url_parse
 from app.models.models import User
 from app import db
 
+@app.before_request
+def before_request():
+    cityform = CityForm()
+    print('--------------DEBUG-1--------------')
+    print(cityform)
+    return cityform
+
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
 def index():
