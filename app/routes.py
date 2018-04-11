@@ -7,6 +7,7 @@ from werkzeug.urls import url_parse
 from app.models.models import User
 from app import db
 
+#Функция загрузки других функций при отображении любой страницы
 @app.before_request
 def before_request():
     cityform = CityForm()
@@ -14,6 +15,7 @@ def before_request():
     print(cityform)
     return cityform
 
+#Главная страница
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
 def index():
@@ -21,18 +23,17 @@ def index():
     form = SearchForm()
     if form.validate_on_submit():
         return redirect(url_for('search'))
-    cityform = CityForm()
-    return render_template('index.html', title='Welcome', form=form, cityform=cityform)
+    return render_template('index.html', title='Добро пожаловать', form=form)
 
-
+#Страница найденных результатов поиска
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     # TO DO
     flash('Search for sucsessful')
     form = AdvancedSearchForm()
-    cityform = CityForm()
-    return render_template('search.html', title='Результаты поиска учреждений', form=form, cityform=cityform)
+    return render_template('search.html', title='Результаты поиска учреждений', form=form)
 
+#Страница входа для зарегистрированных пользователей из детских учреждений
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -50,17 +51,20 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Войти', form=form)
 
+#Функция выхода зарегистрированного пользователя из приложения
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
+#Страница аккаунта зарегистрированного пользователя для управления его кружками
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
     #TO DO
     return render_template('account.html', title='Управление кружками пользователя')
 
+#Страница зарегистрации пользователя из детских учреждений
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
@@ -75,6 +79,7 @@ def signup():
         return redirect(url_for('account'))
     return render_template('signup.html', title='Зарегистрироваться', form=form)
 
+#Страница (функция?) добавления кружка зарегистрированным пользователем
 @app.route('/addclub', methods=['GET', 'POST'])
 @login_required
 def addclub():
