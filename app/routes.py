@@ -8,12 +8,17 @@ from app.models.models import User
 from app import db
 
 #Функция загрузки других функций при отображении любой страницы
-@app.before_request
-def before_request():
+#@app.before_request
+#def before_request():
+#    cityform = CityForm()
+#    print('--------------DEBUG-1--------------')
+#    print(cityform)
+#    return CityForm()
+
+@app.context_processor
+def utility_processor():
     cityform = CityForm()
-    print('--------------DEBUG-1--------------')
-    print(cityform)
-    return cityform
+    return dict(cityform=cityform)
 
 #Главная страница
 @app.route('/')
