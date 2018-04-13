@@ -90,4 +90,12 @@ def signup():
 def addclub():
     #TO DO
     form = AddClubForm()
+    if form.validate_on_submit():
+        new_club = Club(
+            name=form.name.data,
+            #institution=form.institution.data,
+            leader=form.leader.data)
+        db.session.add(new_club)
+        db.session.commit()
+        return redirect(url_for('account'))
     return render_template('addclub.html', title='Добавление нового кружка', form=form)
