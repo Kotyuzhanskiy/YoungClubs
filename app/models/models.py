@@ -4,10 +4,13 @@ from flask_login import UserMixin
 from app import login
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+
 #Модели базы данных в этом файле представлены набором классов
 
 #Модель базы данных пользователей детских учреждений
 class User(UserMixin, db.Model):
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
@@ -33,21 +36,21 @@ def load_user(id):
 #МОДЕЛЬ БАЗЫ ДАННЫХ ДЕТСКИХ КРУЖКОВ
 
 #ассоциативная таблица для связи Club-Ages
-association_table_ages = Table('association_ages', db.metadata,
-    Column('clubs_id', Integer, ForeignKey('clubs.id')),
-    Column('ages_id', Integer, ForeignKey('ages.id'))
+association_table_ages = db.Table('association_ages', db.metadata,
+    db.Column('clubs_id', db.Integer, db.ForeignKey('clubs.id')),
+    db.Column('ages_id', db.Integer, db.ForeignKey('ages.id'))
 )
 
 #ассоциативная таблица для связи Club-Category
-association_table_categories = Table('association_categories', db.metadata,
-    Column('clubs_id', Integer, ForeignKey('clubs.id')),
-    Column('categories_id', Integer, ForeignKey('categories.id'))
+association_table_categories = db.Table('association_categories', db.metadata,
+    db.Column('clubs_id', db.Integer, db.ForeignKey('clubs.id')),
+    db.Column('categories_id', db.Integer, db.ForeignKey('categories.id'))
 )
 
 #ассоциативная таблица для связи Club-Tags
-association_table_tags = Table('association_tags', db.metadata,
-    Column('clubs_id', Integer, ForeignKey('clubs.id')),
-    Column('tags_id', Integer, ForeignKey('tags.id'))
+association_table_tags = db.Table('association_tags', db.metadata,
+    db.Column('clubs_id', db.Integer, db.ForeignKey('clubs.id')),
+    db.Column('tags_id', db.Integer, db.ForeignKey('tags.id'))
 )
 
     #Таблица кружков
@@ -74,34 +77,19 @@ class Club(db.Model):
     url_logo = db.Column(db.String(300), index=False, unique=False)
     reg_date = db.Column(db.Date(), index=True, unique=False)
     last_edit_date = db.Column(db.Date(), index=True, unique=False)
-    #отношение к таблице Insitution n:1
-    institution_id = db.Column(db.Integer, ForeignKey('institutions.id'))
-    institution = relationship("Institution", back_populates='clubs')
-    #отношение к таблице Photo 1:n
-    photos = relationship("Photo", back_populates='clubs')
-    #отношение к таблице Ages n:m
-    ages = relationship("Age", secondary=association_table_ages, backref='clubs')
-    #отношение к таблице Category n:m
-    categories = relationship("Category", secondary=association_table_categories, backref='clubs')
-    #отношение к таблице Tags n:m
-    tags = relationship("Tag", secondary=association_table_tags, backref='clubs')
+    institution_id = db.Column(db.Integer, db.ForeignKey('institutions.id'))
+    institution = db.relationship("Institution", back_populates='clubs')
+    ages = db.relationship("Age", secondary=association_table_ages, back_populates='clubs')
+    categories = db.relationship("Category", secondary=association_table_categories, back_populates='clubs')
+    tags = db.relationship("Tag", secondary=association_table_tags, back_populates='clubs')
+    photos = db.relationship("Photo", back_populates="club")
 
     #Таблица учреждений
-class Insitution(db.Model):
+class Institution(db.Model):
     __tablename__ = 'institutions'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(300), index=True, unique=False)
-    #отношение к таблице Club 1:n
-    clubs = relationship('Club', back_populates="institutions")
-
-    #Таблица фото
-class Photo(db.Model):
-    __tablename__ = 'photos'
-    id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(300), index=False, unique=False)
-    #отношение к таблице Club n:1
-    club_id = db.Column(db.Integer, ForeignKey('clubs.id'))
-    club = db.relationship("Club", back_populates="clubs")
+    clubs = db.relationship('Club', back_populates="institution")
 
     #Таблица возраста
 class Age(db.Model):
@@ -109,15 +97,26 @@ class Age(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     age_from = db.Column(db.Integer, index=False, unique=False)
     age_to = db.Column(db.Integer, index=False, unique=False)
+    clubs = db.relationship("Club", secondary=association_table_ages, back_populates='ages')
 
     #Таблица категорий клубов
 class Category(db.Model):
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), index=True, unique=False)
+    clubs = db.relationship("Club", secondary=association_table_categories, back_populates='categories')
 
     #Таблица тэгов клубов
 class Tag(db.Model):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), index=True, unique=False)
+    clubs = db.relationship("Club", secondary=association_table_tags, back_populates='tags')
+
+    #Таблица фото
+class Photo(db.Model):
+    __tablename__ = 'photos'
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(300), index=False, unique=False)
+    club_id = db.Column(db.Integer, db.ForeignKey('clubs.id'))
+    club = db.relationship("Club", back_populates="photos")
