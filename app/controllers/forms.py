@@ -46,10 +46,10 @@ class AdvancedSearchForm(FlaskForm):
 
 # Форма добавления детского учреждения в аккаунте пользователя
 class AddClubForm(FlaskForm):
-    club = StringField('Название кружка', validators=[DataRequired()])
-    institution = StringField('Учреждение', validators=[DataRequired()])
-    teacher = StringField('Преподаватель', validators=[DataRequired()])
-    category = FormField(AdvancedSearchForm)
+    name = StringField('Название кружка', validators=[DataRequired()])
+    institution = StringField('Учреждение')#, validators=[DataRequired()])
+    leader = StringField('Преподаватель', validators=[DataRequired()])
+    #category = FormField(AdvancedSearchForm)
     submit = SubmitField('Добавить кружок')
 
 # Форма выбора города при поиске десткого учреждения на всех страницах
