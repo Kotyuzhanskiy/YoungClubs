@@ -32,78 +32,92 @@ def load_user(id):
 
 #МОДЕЛЬ БАЗЫ ДАННЫХ ДЕТСКИХ КРУЖКОВ
 
+#ассоциативная таблица для связи Club-Ages
+association_table = Table('association_ages', db.metadata,
+    Column('club_id', Integer, ForeignKey('club.id')),
+    Column('ages_id', Integer, ForeignKey('ages.id'))
+)
+
+#ассоциативная таблица для связи Club-Category
+association_table = Table('association_category', db.metadata,
+    Column('club_id', Integer, ForeignKey('club.id')),
+    Column('category_id', Integer, ForeignKey('category.id'))
+)
+
+#ассоциативная таблица для связи Club-Tags
+association_table = Table('association_tags', db.metadata,
+    Column('club_id', Integer, ForeignKey('club.id')),
+    Column('tags_id', Integer, ForeignKey('tags.id'))
+)
+
     #Таблица кружков
 class Club(db.Model):
+    __tablename__ = 'club'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(300), index=True, unique=False)
-    snippet = db.Column(db.String(300), index=False, unique=False)
-    description = db.Column(db.String(2000), index=False, unique=False)
-    price = db.Column(db.String(100), index=False, unique=False)
-    phonefix = db.Column(db.String(10), index=False, unique=False)
-    phonemob = db.Column(db.String(10), index=False, unique=False)
-    web = db.Column(db.String(120), index=False, unique=False)
-    email = db.Column(db.String(120), index=False, unique=False)
-    social = db.Column(db.String(120), index=False, unique=False)
-    building = db.Column(db.String(5), index=False, unique=False)
+    state = db.Column(db.String(10), index=True, unique=False)
+    name = db.Column(db.String(100), index=True, unique=False)
+    snippet = db.Column(db.String(500), index=False, unique=False)
+    description = db.Column(db.String(10000), index=False, unique=False)
+    leader = db.Column(db.String(150), index=False, unique=False)
+    price = db.Column(db.String(50), index=False, unique=False)
+    phone = db.Column(db.String(30), index=False, unique=False)
+    web = db.Column(db.String(100), index=False, unique=False)
+    email = db.Column(db.String(50), index=False, unique=False)
+    social = db.Column(db.String(100), index=False, unique=False)
+    street = db.Column(db.String(30), index=False, unique=False)
+    building = db.Column(db.String(10), index=False, unique=False)
+    number = db.Column(db.String(10), index=False, unique=False)
     room = db.Column(db.String(5), index=False, unique=False)
     days = db.Column(db.String(50), index=False, unique=False)
     start = db.Column(db.String(50), index=False, unique=False)
     finish = db.Column(db.String(50), index=False, unique=False)
     url_logo = db.Column(db.String(300), index=False, unique=False)
+    reg_date = db.Column(db.Date(), index=True, unique=False)
+    last_edit_date = db.Column(db.Date(), index=True, unique=False)
     #отношение к таблице Insitution n:1
-    insitution_id = db.Column(db.Integer, db.ForeignKey('institution.id'))
-    institution = db.relationship('Institution', backref='institution', lazy='dynamic')
-    #отношение к таблице City n:1
-    city_id = db.Column(db.Integer, db.ForeignKey('city.id')) #n:1
-    city = db.relationship('City', backref='city', lazy='dynamic')
-    #отношение к таблице Street n:1
-    street_id = db.Column(db.Integer, db.ForeignKey('street.id')) #n:1
-    street = db.relationship('Street', backref='street', lazy='dynamic')
+    institution_id = db.Column(db.Integer, ForeignKey('institution.id'))
+    institution = db.relationship("Institution", backref='institution', lazy='dynamic')
     #отношение к таблице Photo 1:n
-    photo = db.relationship('Photo', backref='photo', lazy='dynamic')
-    #отношение к таблице Video 1:n
-    video = db.relationship('Video', backref='video', lazy='dynamic')
-    #отношение к таблице Leaders m:n
+    photo = db.relationship("Photo", backref='photo', lazy='dynamic')
+    #отношение к таблице Ages n:m
+    ages = db.relationship("Ages", secondary=association_table, backref='club', lazy='dynamic')
+    #отношение к таблице Category n:m
+    category = db.relationship("Category", secondary=association_table, backref='club', lazy='dynamic')
+    #отношение к таблице Tags n:m
+    tags = db.relationship("Tags", secondary=association_table, backref='club', lazy='dynamic')
 
     #Таблица учреждений
 class Insitution(db.Model):
+    __tablename__ = 'institution'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(300), index=True, unique=False)
     #отношение к таблице Club 1:n
-    club = db.relationship('Club', back_populates="institution", lazy='dynamic')
-
-    #Таблица городов
-class City(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(300), index=True, unique=False)
-    #отношение к таблице Club 1:n
-    club = db.relationship('Club', back_populates="city", lazy='dynamic')
-
-    #Таблица улиц
-class Street(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(300), index=True, unique=False)
-    #отношение к таблице Club 1:n
-    club = db.relationship('Club', back_populates="street", lazy='dynamic')
+    clubs = db.relationship('Club', back_populates="institution", lazy='dynamic')
 
     #Таблица фото
 class Photo(db.Model):
+    __tablename__ = 'photo'
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(300), index=False, unique=False)
     #отношение к таблице Club n:1
-    club_id = Column(Integer, ForeignKey('club.id'))
-    club = relationship("Club", back_populates="club", lazy='dynamic')
+    club_id = db.Column(db.Integer, ForeignKey('club.id'))
+    club = db.relationship("Club", back_populates="club")
 
-    #Таблица видео
-class Video(db.Model):
+    #Таблица возраста
+class Age(db.Model):
+    __tablename__ = 'ages'
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(300), index=False, unique=False)
-    #отношение к таблице Club n:1
-    club_id = Column(Integer, ForeignKey('club.id'))
-    club = relationship("Club", back_populates="club", lazy='dynamic')
+    age_from = db.Column(db.Integer, index=False, unique=False)
+    age_to = db.Column(db.Integer, index=False, unique=False)
 
-    #Таблица руководителей (преподавателей) кружка
-class Leader(db.Model):
+    #Таблица категорий клубов
+class Category(db.Model):
+    __tablename__ = 'category'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(300), index=False, unique=False)
-    #отношение к таблице Club n:m
+    name = db.Column(db.String(50), index=True, unique=False)
+
+    #Таблица тэгов клубов
+class Tags(db.Model):
+    __tablename__ = 'tags'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), index=True, unique=False)
