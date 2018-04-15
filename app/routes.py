@@ -4,7 +4,7 @@ from app import app
 from app.controllers.forms import LoginForm, SearchForm, SignUpForm, AdvancedSearchForm, AddClubForm, CityForm
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
-from app.models.models import User
+from app.models.models import User, Club, Institution, Age, Category, Tag, Photo
 from app import db
 
 #Функция загрузки других функций при отображении любой страницы
@@ -15,10 +15,10 @@ from app import db
 #    print(cityform)
 #    return CityForm()
 
-@app.context_processor
-def utility_processor():
-    cityform = CityForm()
-    return dict(cityform=cityform)
+#@app.context_processor
+#def utility_processor(methods=['GET', 'POST']):
+#    cityform = CityForm()
+#    return dict(cityform=cityform)
 
 #Главная страница
 @app.route('/')
@@ -92,9 +92,54 @@ def addclub():
     form = AddClubForm()
     if form.validate_on_submit():
         new_club = Club(
+            user_id=current_user.id,
             name=form.name.data,
-            #institution=form.institution.data,
-            leader=form.leader.data)
+            snippet=form.snippet.data,
+            description=form.description.data,
+            leader=form.leader.data,
+            price=form.price.data,
+            phone=form.phone.data,
+            web=form.web.data,
+            email=form.email.data,
+            social=form.social.data,
+            street=form.street.data,
+            building=form.building.data,
+            room=form.room.data,
+            days=form.days.data,
+            start=form.start.data,
+            finish=form.finish.data,
+            url_logo=form.url_logo.data,
+            #photos=form.photos.data,
+            )
+        new_institution = Institution(
+            name=form.institution.data
+            )
+        new_ages = Age(
+            age_from=form.age_from.data,
+            age_to=form.age_to.data
+            )
+        #catagories = ', '.join([f'{key}: {value}' for key, value in form.categories.data.keys()])
+        #print('----------------DEBUG----------------')
+        #print(catagories)
+        #new_categories = Category(# добавление категории
+        #    name=catagories
+        #    )
+        new_tags = Tag(
+            name=form.tags.data
+            )
+        #new_photos = Photo(
+        #    url=form.photos.data
+        #    )
+        db.session.add(new_club)
+        db.session.add(new_institution)
+        db.session.add(new_ages)
+        #db.session.add(new_categories) # добавление категории
+        db.session.add(new_tags)
+        new_institution.clubs.append(new_club)
+        new_club.ages.append(new_ages)
+        #new_club.categories.append(new_categories) # добавление категории
+        new_club.tags.append(new_tags)
+        #new_photos.club.append(new_club)
         db.session.add(new_club)
         db.session.commit()
         return redirect(url_for('account'))

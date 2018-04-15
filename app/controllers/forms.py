@@ -35,21 +35,48 @@ class SignUpForm(FlaskForm):
         if user is not None:
             raise ValidationError('Email не уникален.')
 
-# Форма расширенного поиска детских учреждений на странице найденных учреждений для анонимных пользователей
-class AdvancedSearchForm(FlaskForm):
+# Базовая форма категорий
+class CategoriesForm(FlaskForm):
     sport = BooleanField('ДЮСШ')
     music = BooleanField('Музыка')
-    theatre  = BooleanField('Музыка')
-    tto = BooleanField('Дошкольники')
-    ttoten = BooleanField('Младшие школьники')
+    theatre  = BooleanField('Театр')
+
+# Базовая форма возрастов
+class AgesForm(FlaskForm):
+    from3to6 = BooleanField('От 3 до 6 лет')
+    from6to10 = BooleanField('От 6 до 10 лет')
+    from10to16 = BooleanField('От 10 до 16 лет')
+
+# Форма расширенного поиска детских учреждений на странице найденных учреждений для анонимных пользователей
+class AdvancedSearchForm(FlaskForm):
+    categories = FormField(CategoriesForm)
+    ages = FormField(AgesForm)
     submit = SubmitField('Найти учреждения')
 
 # Форма добавления детского учреждения в аккаунте пользователя
 class AddClubForm(FlaskForm):
     name = StringField('Название кружка', validators=[DataRequired()])
-    institution = StringField('Учреждение')#, validators=[DataRequired()])
+    institution = StringField('Учреждение', validators=[DataRequired()])
+    snippet = StringField('Краткое описание кружка', validators=[DataRequired()])
+    description = StringField('Полное описание кружка', validators=[DataRequired()])
     leader = StringField('Преподаватель', validators=[DataRequired()])
-    #category = FormField(AdvancedSearchForm)
+    price = StringField('Цена', validators=[DataRequired()])
+    phone = StringField('Телефон', validators=[DataRequired()])
+    web = StringField('WEB-страница', validators=[DataRequired()])
+    email = StringField('Электронная почта', validators=[DataRequired()])
+    social = StringField('Страница в социальной сети', validators=[DataRequired()])
+    street = StringField('Улица', validators=[DataRequired()])
+    building = StringField('Номер строения', validators=[DataRequired()])
+    room = StringField('Кабинет', validators=[DataRequired()])
+    days = StringField('Дни работы', validators=[DataRequired()])
+    start = StringField('Начало работы', validators=[DataRequired()])
+    finish = StringField('Конец работы', validators=[DataRequired()])
+    url_logo = StringField('Логотип', validators=[DataRequired()])
+    age_from = StringField('Возраст ОТ', validators=[DataRequired()])
+    age_to = StringField('Возраст ДО', validators=[DataRequired()])
+    categories = FormField(CategoriesForm)
+    tags = StringField('Тэги', validators=[DataRequired()])
+    #photos = StringField('Ссылки на фото', validators=[DataRequired()])
     submit = SubmitField('Добавить кружок')
 
 # Форма выбора города при поиске десткого учреждения на всех страницах

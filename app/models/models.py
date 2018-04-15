@@ -1,7 +1,7 @@
-from app import db
+from app import db, login
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from app import login
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -15,9 +15,13 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    clubs = db.relationship('Club', back_populates="user", lazy='dynamic')
 
-    def __repr__(self):
-        return '<User {}>'.format(self.username)
+    #def __repr__(self):
+        #return '<User {}>'.format(self.username)
+    #def __repr__(self):
+        #return '<User.id {}>'.format(self.id)
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -57,6 +61,8 @@ association_table_tags = db.Table('association_tags', db.metadata,
 class Club(db.Model):
     __tablename__ = 'clubs'
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User", back_populates='clubs')
     state = db.Column(db.String(10), index=True, unique=False)
     name = db.Column(db.String(100), index=True, unique=False)
     snippet = db.Column(db.String(500), index=False, unique=False)
@@ -69,20 +75,19 @@ class Club(db.Model):
     social = db.Column(db.String(100), index=False, unique=False)
     street = db.Column(db.String(30), index=False, unique=False)
     building = db.Column(db.String(10), index=False, unique=False)
-    number = db.Column(db.String(10), index=False, unique=False)
     room = db.Column(db.String(5), index=False, unique=False)
     days = db.Column(db.String(50), index=False, unique=False)
     start = db.Column(db.String(50), index=False, unique=False)
     finish = db.Column(db.String(50), index=False, unique=False)
     url_logo = db.Column(db.String(300), index=False, unique=False)
-    reg_date = db.Column(db.Date(), index=True, unique=False)
-    last_edit_date = db.Column(db.Date(), index=True, unique=False)
+    reg_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    last_edit_date = db.Column(db.DateTime, index=True, unique=False)
     institution_id = db.Column(db.Integer, db.ForeignKey('institutions.id'))
     institution = db.relationship("Institution", back_populates='clubs')
-    ages = db.relationship("Age", secondary=association_table_ages, back_populates='clubs')
-    categories = db.relationship("Category", secondary=association_table_categories, back_populates='clubs')
-    tags = db.relationship("Tag", secondary=association_table_tags, back_populates='clubs')
-    photos = db.relationship("Photo", back_populates="club")
+    ages = db.relationship("Age", secondary=association_table_ages, back_populates='clubs', lazy='dynamic')
+    categories = db.relationship("Category", secondary=association_table_categories, back_populates='clubs', lazy='dynamic')
+    tags = db.relationship("Tag", secondary=association_table_tags, back_populates='clubs', lazy='dynamic')
+    photos = db.relationship("Photo", back_populates="club", lazy='dynamic')
 
     #Таблица учреждений
 class Institution(db.Model):
