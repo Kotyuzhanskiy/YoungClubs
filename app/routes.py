@@ -66,8 +66,8 @@ def logout():
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-    #TO DO
-    return render_template('account.html', title='Управление кружками пользователя')
+    user_select = Club.query.filter_by(user_id=current_user.id).all()
+    return render_template('account.html', title='Управление кружками пользователя', user_select=user_select)
 
 #Страница зарегистрации пользователя из детских учреждений
 @app.route('/signup', methods=['GET', 'POST'])
