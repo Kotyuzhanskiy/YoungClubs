@@ -1,7 +1,7 @@
 # Данный файл содержит формы, которые отображаются на страницах сайта
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, FormField
+from wtforms import StringField, DateTimeField, PasswordField, BooleanField, SubmitField, SelectField, FormField, FieldList, TextField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models.models import User
 
@@ -43,15 +43,25 @@ class CategoriesForm(FlaskForm):
 
 # Базовая форма возрастов
 class AgesForm(FlaskForm):
-    from3to6 = BooleanField('От 3 до 6 лет')
-    from6to10 = BooleanField('От 6 до 10 лет')
-    from10to16 = BooleanField('От 10 до 16 лет')
+    fromto5 = BooleanField('До 5 лет')
+    from6to9 = BooleanField('От 6 до 9 лет')
+    from10to14 = BooleanField('От 10 до 14 лет')
+    from15to18 = BooleanField('От 15 до 18 лет')
 
 # Форма расширенного поиска детских учреждений на странице найденных учреждений для анонимных пользователей
 class AdvancedSearchForm(FlaskForm):
     categories = FormField(CategoriesForm)
     ages = FormField(AgesForm)
     submit = SubmitField('Найти учреждения')
+
+class OfficeHours(FlaskForm):
+    Monday = StringField('Понедельник', validators=[DataRequired()])
+    Tuesday = StringField('Вторник', validators=[DataRequired()])
+    Wednesday = StringField('Среда', validators=[DataRequired()])
+    Thursday = StringField('Четверг', validators=[DataRequired()])
+    Friday = StringField('Пятница', validators=[DataRequired()])
+    Saturday = StringField('Суббота', validators=[DataRequired()])
+    Sunday = StringField('Воскресенье', validators=[DataRequired()])
 
 # Форма добавления детского учреждения в аккаунте пользователя
 class AddClubForm(FlaskForm):
@@ -62,19 +72,16 @@ class AddClubForm(FlaskForm):
     leader = StringField('Преподаватель', validators=[DataRequired()])
     price = StringField('Цена', validators=[DataRequired()])
     phone = StringField('Телефон', validators=[DataRequired()])
-    web = StringField('WEB-страница', validators=[DataRequired()])
-    email = StringField('Электронная почта', validators=[DataRequired()])
-    social = StringField('Страница в социальной сети', validators=[DataRequired()])
+    web = StringField('WEB-страница')
+    email = StringField('Электронная почта')
+    social = StringField('Страница в социальной сети')
     street = StringField('Улица', validators=[DataRequired()])
     building = StringField('Номер строения', validators=[DataRequired()])
-    room = StringField('Кабинет', validators=[DataRequired()])
-    days = StringField('Дни работы', validators=[DataRequired()])
-    start = StringField('Начало работы', validators=[DataRequired()])
-    finish = StringField('Конец работы', validators=[DataRequired()])
-    url_logo = StringField('Логотип', validators=[DataRequired()])
-    age_from = StringField('Возраст ОТ', validators=[DataRequired()])
-    age_to = StringField('Возраст ДО', validators=[DataRequired()])
-    categories = FormField(CategoriesForm)
+    room = StringField('Кабинет')
+    #hours = FieldList(FormField(OfficeHours), min_entries=1, max_entries=1, label = 'Время работы')
+    url_logo = StringField('Логотип')
+    ages = FormField(AgesForm, label = 'Возраст')
+    categories = FormField(CategoriesForm, label = 'Категория')
     tags = StringField('Тэги', validators=[DataRequired()])
     #photos = StringField('Ссылки на фото', validators=[DataRequired()])
     submit = SubmitField('Добавить кружок')
