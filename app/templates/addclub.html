@@ -7,6 +7,13 @@
                 {{ form.hidden_tag() }}
                 {% for field in form %}
                     {% if field.widget.input_type != 'hidden' %} {{ field.label }} {% endif %} {{ field }}<br>
+                    <p>
+                        {% for error in field.errors %}
+                            <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </p>
+                {{ form.hidden_tag() }}
                 {% endfor %}
+
         </form>
 {% endblock %}
