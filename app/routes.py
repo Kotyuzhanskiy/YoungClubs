@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, jsonify
 from app import app
 from app.controllers.forms import LoginForm, SearchForm, SignUpForm, AdvancedSearchForm, AddClubForm, CityForm
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
 from app.models.models import User, Club, Institution, Age, Category, Tag, Photo
 from app import db
+from app.controllers.fn import format_tags, format_form_list, SimpleSearch, AdvancedSearch
+from pprint import pprint
 
 #Функция загрузки других функций при отображении любой страницы
 #@app.before_request
@@ -26,8 +28,15 @@ from app import db
 def index():
     # TO DO
     form = SearchForm()
+    form2 = AdvancedSearchForm()
+    search_value = form.search.data
     if form.validate_on_submit():
-        return redirect(url_for('search'))
+        clubs_search_results = SimpleSearch(search_value)
+        for club in clubs_search_results:
+            print(club.id)
+            print(club.name)
+            print(club.snippet)
+        #return render_template('search.html', title='Результаты поиска учреждений', form2=form2)
     return render_template('index.html', title='Добро пожаловать', form=form)
 
 #Страница найденных результатов поиска
@@ -36,6 +45,7 @@ def search():
     # TO DO
     flash('Search for sucsessful')
     form = AdvancedSearchForm()
+
     return render_template('search.html', title='Результаты поиска учреждений', form=form)
 
 #Страница входа для зарегистрированных пользователей из детских учреждений
@@ -69,7 +79,7 @@ def account():
     user_select = Club.query.filter_by(user_id=current_user.id).all()
     return render_template('account.html', title='Управление кружками пользователя', user_select=user_select)
 
-#Страница зарегистрации пользователя из детских учреждений
+#Страница регистрации пользователя из детских учреждений
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
@@ -105,7 +115,6 @@ def addclub():
             street=form.street.data,
             building=form.building.data,
             room=form.room.data,
-            days=form.days.data,
             start=form.start.data,
             finish=form.finish.data,
             url_logo=form.url_logo.data,
@@ -114,33 +123,41 @@ def addclub():
         new_institution = Institution(
             name=form.institution.data
             )
-        new_ages = Age(
-            age_from=form.age_from.data,
-            age_to=form.age_to.data
-            )
-        #catagories = ', '.join([f'{key}: {value}' for key, value in form.categories.data.keys()])
-        #print('----------------DEBUG----------------')
-        #print(catagories)
-        #new_categories = Category(# добавление категории
-        #    name=catagories
-        #    )
-        new_tags = Tag(
-            name=form.tags.data
-            )
-        #new_photos = Photo(
-        #    url=form.photos.data
-        #    )
         db.session.add(new_club)
         db.session.add(new_institution)
-        db.session.add(new_ages)
-        #db.session.add(new_categories) # добавление категории
-        db.session.add(new_tags)
         new_institution.clubs.append(new_club)
-        new_club.ages.append(new_ages)
-        #new_club.categories.append(new_categories) # добавление категории
-        new_club.tags.append(new_tags)
-        #new_photos.club.append(new_club)
         db.session.add(new_club)
-        db.session.commit()
+        #Добавление тэгов для клуба в БД
+        new_tags_list = format_tags(form.tags.data)
+        for tag in new_tags_list:
+            row = Tag.query.filter_by(name=tag).first()
+            if row == None:
+                new_tag = Tag(name=tag)
+                db.session.add(new_tag)
+                new_club.tags.append(new_tag)
+            else:
+                new_club.tags.append(row)
+        #Добавление категории для кружка в БД
+        new_category_list = format_form_list(form.categories.data)
+        for category in new_category_list:
+            row = Category.query.filter_by(name=category).first()
+            if row == None:
+                new_category = Category(name=category)
+                db.session.add(new_category)
+                new_club.categories.append(new_category)
+            else:
+                new_club.categories.append(row)
+        #Добавление возрастов для кружка в БД
+        new_age_list = format_form_list(form.ages.data)
+        for age in new_age_list:
+            row = Age.query.filter_by(name=age).first()
+            if row == None:
+                new_age = Age(name=age)
+                db.session.add(new_age)
+                new_club.ages.append(new_age)
+            else:
+                new_club.ages.append(row)
+        #Добавление времени работы для кружка в БД
+        db.session.commit()#Подтверждение записи в таблицы БД
         return redirect(url_for('account'))
     return render_template('addclub.html', title='Добавление нового кружка', form=form)
