@@ -13,15 +13,13 @@ class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
+    role = db.Column(db.Integer, index=False, unique=False)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     clubs = db.relationship('Club', back_populates="user", lazy='dynamic')
 
-    #def __repr__(self):
-        #return '<User {}>'.format(self.username)
-    #def __repr__(self):
-        #return '<User.id {}>'.format(self.id)
-
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -100,6 +98,7 @@ class Institution(db.Model):
 class Age(db.Model):
     __tablename__ = 'ages'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(300), index=True, unique=False)
     age_from = db.Column(db.Integer, index=False, unique=False)
     age_to = db.Column(db.Integer, index=False, unique=False)
     clubs = db.relationship("Club", secondary=association_table_ages, back_populates='ages')
