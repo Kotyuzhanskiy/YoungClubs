@@ -20,6 +20,7 @@ def format_form_list(item_dict):
 #Функция поиска с Главной странице по одной строке
 def SimpleSearch(search_value):
     x = Club.query.filter(Club.tags.any(name=search_value)).all()
+    #x = Club.query.filter(Club.tags.like(name=search_value)).all()
     return x
 #Функция расширенного поиска по различным полям (категория, возраст, тэги)
 def AdvancedSearch(search_value):
