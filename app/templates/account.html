@@ -3,14 +3,35 @@
 {% block content %}
     <h1>Здравствуйте {{ current_user.username }}! </h1>
     <h2>Это Ваш кабинет пользователя. Здесь находятся кружки, которыми Вы управляете</h2>
-    <form action="{{ url_for('addclub') }}">
-        {% for item in user_select %}
-            {{ item.name }} {{ item.leader }} {{ item.price }}
 
-            <button type="button" name="btn1" value="Edit">Редактировать</button>
-    <!--        <button type="button" onclick="Edit(id)" id="s1" value="Edit">   --->
-            <button type="button" name="btn2" value="Delete">Удалить</button> <br>
-        {% endfor %}
+    <form action="{{ url_for('addclub') }}">
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Учреждение</th>
+                <th>Название_кружка</th>
+                <th>Преподаватель</th>
+                <th>Стоимость</th>
+              </tr>
+            </thead>
+
+            <tbody>
+                {% for item in user_select %}
+                    <tr>
+                        <td>{{ item.name_i }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.leader }}</td>
+                        <td>{{ item.price }}</td>
+
+                        <td><a href="{{ 'editclub/{}'.format(item.id) }}">Редактировать</a></td>
+                        <td><a href="{{ 'deleteclub/{}'.format(item.id) }}">Удалить</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
         <button type="submit">Добавить кружок</button>
     </form>
 {% endblock %}
+<!-- <input type="button" value="Удалить">   -->

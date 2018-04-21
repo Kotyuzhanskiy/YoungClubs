@@ -76,7 +76,9 @@ def logout():
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-    user_select = Club.query.filter_by(user_id=current_user.id).all()
+    #выбор из clubs и institution. похожие названия колонок переименовывать "i.name as name_i"
+    #user_select = db.execute("SELECT c.*, i.name as name_i FROM clubs c INNER JOIN institutions i ON c.institution_id = i.id WHERE user_id = :user_id", user_id=current_user.id)
+    user_select = db.execute("SELECT * FROM clubs WHERE user_id = :user_id", user_id=current_user.id)
     return render_template('account.html', title='Управление кружками пользователя', user_select=user_select)
 
 #Страница регистрации пользователя из детских учреждений
@@ -162,3 +164,21 @@ def addclub():
         db.session.commit()#Подтверждение записи в таблицы БД
         return redirect(url_for('account'))
     return render_template('addclub.html', title='Добавление нового кружка', form=form)
+
+@app.route('/editclub/<club_id>', methods=['GET'])
+@login_required
+def editclub(club_id):
+    club = db.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id)
+    return render_template('editclub.html', title='Управление кружками пользователя', club=club)
+
+@app.route('/deleteclub/<club_id>', methods=['GET'])
+@login_required
+def deleteclub(club_id):
+    club_del = db.execute("DELETE FROM clubs WHERE c.id =  = :club_id", club_id = club_id)
+    return redirect (url_for('account'))
+
+@app.route('/updateclub/<club_id>', methods=['GET'])
+@login_required
+def updateclub(club_id):
+    club_update = db.execute("UPDATE clubs SET WHERE c.id =  = :club_id", club_id = club_id)
+    return redirect (url_for('account'))

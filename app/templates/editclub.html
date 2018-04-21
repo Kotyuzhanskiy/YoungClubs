@@ -1,1 +1,27 @@
-kjndn
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Здравствуйте {{ current_user.username }}! </h1>
+    <h2>Это запись, которую Вы выбрали</h2>
+    <form action="/editclub" method="post">
+         <input type="hidden" name="id" value="{{ club.id }}">
+
+                <p>
+                    Учреждение
+                    <input type="text" name="institution" value="{{ club.institution }}">
+                </p>
+                <p>
+                    Название_кружка
+                    <input type="text" name="name" value="{{ club.name }}">
+                </p>
+
+                <p>Преподаватель
+                <input type="text" name="leader" value="{{ club.leader }}">
+                </p>
+                <p>Стоимость
+                <input type="text" name="price" value="{{ club.price }}">
+                </p>
+
+        <a href="{{ 'updateclub/{}'.format(id) }}">Сохранить</a>
+
+{% endblock %}
