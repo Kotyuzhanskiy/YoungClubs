@@ -1,6 +1,6 @@
 from flask import Flask
 from app import db
-from app.models.models import User, Club, Institution, Age, Category, Tag, Photo
+from app.models.models import User, Club, Age, Category, Tag, Photo
 from sqlalchemy import Table, Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from pprint import pprint

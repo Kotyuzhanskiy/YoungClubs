@@ -4,7 +4,7 @@ from app import app
 from app.controllers.forms import LoginForm, SearchForm, SignUpForm, AdvancedSearchForm, AddClubForm, CityForm
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
-from app.models.models import User, Club, Institution, Age, Category, Tag, Photo
+from app.models.models import User, Club, Age, Category, Tag, Photo
 from app import db
 from app.controllers.fn import format_tags, format_form_list, SimpleSearch, AdvancedSearch
 from pprint import pprint
@@ -115,17 +115,18 @@ def addclub():
             street=form.street.data,
             building=form.building.data,
             room=form.room.data,
-            start=form.start.data,
-            finish=form.finish.data,
+            #start=form.start.data,
+            #finish=form.finish.data,
             url_logo=form.url_logo.data,
+            institution=form.institution.data
             #photos=form.photos.data,
             )
-        new_institution = Institution(
-            name=form.institution.data
-            )
+        #new_institution = Institution(
+        #    name=form.institution.data
+        #    )
         db.session.add(new_club)
-        db.session.add(new_institution)
-        new_institution.clubs.append(new_club)
+        #db.session.add(new_institution)
+        #new_institution.clubs.append(new_club)
         db.session.add(new_club)
         #Добавление тэгов для клуба в БД
         new_tags_list = format_tags(form.tags.data)
