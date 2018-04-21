@@ -12,16 +12,18 @@
                 <th>Название_кружка</th>
                 <th>Преподаватель</th>
                 <th>Стоимость</th>
+                <th>Краткое описание</th>
               </tr>
             </thead>
 
             <tbody>
                 {% for item in user_select %}
                     <tr>
-                        <td>{{ item.name_i }}</td>
+                        <td>{{ item.institution }}</td>
                         <td>{{ item.name }}</td>
                         <td>{{ item.leader }}</td>
                         <td>{{ item.price }}</td>
+                        <td>{{ item.snippet }}</td>
 
                         <td><a href="{{ 'editclub/{}'.format(item.id) }}">Редактировать</a></td>
                         <td><a href="{{ 'deleteclub/{}'.format(item.id) }}">Удалить</a></td>
