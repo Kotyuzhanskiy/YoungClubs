@@ -12,7 +12,10 @@
                 <th>Название_кружка</th>
                 <th>Преподаватель</th>
                 <th>Стоимость</th>
+                <th>Тэги</th>
                 <th>Краткое описание</th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
 
@@ -23,8 +26,8 @@
                         <td>{{ item.name }}</td>
                         <td>{{ item.leader }}</td>
                         <td>{{ item.price }}</td>
+                        <td>{{ ", ".join(item.tags)  }}</td>
                         <td>{{ item.snippet }}</td>
-
                         <td><a href="{{ 'editclub/{}'.format(item.id) }}">Редактировать</a></td>
                         <td><a href="{{ 'deleteclub/{}'.format(item.id) }}">Удалить</a></td>
                     </tr>

@@ -23,30 +23,24 @@ from pprint import pprint
 #    return dict(cityform=cityform)
 
 #Главная страница
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
-    # TO DO
     form = SearchForm()
-    form2 = AdvancedSearchForm()
-    search_value = form.search.data
-    if form.validate_on_submit():
-        clubs_search_results = SimpleSearch(search_value)
-        for club in clubs_search_results:
-            print(club.id)
-            print(club.name)
-            print(club.snippet)
-        #return render_template('search.html', title='Результаты поиска учреждений', form2=form2)
+    #form2 = AdvancedSearchForm()
     return render_template('index.html', title='Добро пожаловать', form=form)
 
 #Страница найденных результатов поиска
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/search', methods=['POST'])
 def search():
-    # TO DO
-    flash('Search for sucsessful')
-    form = AdvancedSearchForm()
-
-    return render_template('search.html', title='Результаты поиска учреждений', form=form)
+    form = SearchForm()
+    if form.validate_on_submit():
+        search_value = form.search.data
+        clubs_search_results = SimpleSearch(search_value)
+        return render_template('search.html', title='Результаты поиска учреждений', clubs_search_results=clubs_search_results)
+    flash('Search for sucsessful!!!')
+    #form = AdvancedSearchForm()
+    return render_template('search.html', title='Результаты поиска учреждений', clubs=None)
 
 #Страница входа для зарегистрированных пользователей из детских учреждений
 @app.route('/login', methods=['GET', 'POST'])

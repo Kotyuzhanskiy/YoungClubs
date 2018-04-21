@@ -2,11 +2,22 @@
 
 {% block content %}
     <h1>Результаты поиска учреждений</h1>
-        <form action="" method="post">
-            <p>Выберите нужные элементы для поиска</p>
-                {{ form.hidden_tag() }}
-                {% for field in form %}
-                    {% if field.widget.input_type != 'hidden' %} {{ field.label }} {% endif %} {{ field }}<br>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Club_id</th>
+                <th>Имя клуба</th>
+                <th>Короткое описание</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for item in clubs_search_results%}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.snipper }}</td>
+                    </tr>
                 {% endfor %}
-        </form>
+            </tbody>
+        </table>
 {% endblock %}{{ field.label }}
