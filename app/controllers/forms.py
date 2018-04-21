@@ -22,7 +22,7 @@ class SignUpForm(FlaskForm):
     username = StringField('Пользователь', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Пароль', validators=[DataRequired()])
-    password_again = PasswordField('Поворите пароль', validators=[DataRequired(), EqualTo('password')])
+    password_again = PasswordField('Повторите пароль', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Зарегистрироваться')
 
     def validate_username(self, username):

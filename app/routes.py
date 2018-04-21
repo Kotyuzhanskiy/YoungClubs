@@ -168,17 +168,27 @@ def addclub():
 @app.route('/editclub/<club_id>', methods=['GET'])
 @login_required
 def editclub(club_id):
-    club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id)
+    club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
     return render_template('editclub.html', title='Управление кружками пользователя', club=club)
 
 @app.route('/deleteclub/<club_id>', methods=['GET'])
 @login_required
 def deleteclub(club_id):
-    club_del = db.engine.execute("DELETE FROM clubs WHERE c.id =  = :club_id", club_id = club_id)
+    club_del = db.engine.execute("DELETE FROM clubs WHERE id = :club_id", club_id = club_id)
     return redirect (url_for('account'))
 
-@app.route('/updateclub/<club_id>', methods=['GET'])
+@app.route('/updateclub', methods=['POST'])
 @login_required
-def updateclub(club_id):
-    club_update = db.engine.execute("UPDATE clubs SET WHERE c.id =  = :club_id", club_id = club_id)
+def updateclub():
+    id = request.form.get('id')
+    name = request.form.get('name')
+    institution = request.form.get('institution')
+    leader = request.form.get('leader')
+    price = request.form.get('price')
+
+    club_update = db.engine.execute(
+        """
+            UPDATE clubs SET name=:name, institution=:institution, leader=:leader, price=:price WHERE id = :id
+        """
+        , id = id, name=name, institution=institution, leader=leader, price=price)
     return redirect (url_for('account'))
