@@ -1,0 +1,6 @@
+flask
+flask-wtf
+flask-sqlalchemy
+flask-migrate
+flask-login
+flask-uploads-0.2.1

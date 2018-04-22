@@ -4,6 +4,17 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, DateTimeField, PasswordField, BooleanField, SubmitField, SelectField, FormField, FieldList, TextField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models.models import User
+from flask_uploads import UploadSet, IMAGES
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+
+images = UploadSet('images', IMAGES)
+
+# Форма загрузки изображения
+class UploadLogoForm(FlaskForm):
+    upload = FileField('image', validators=[
+        FileRequired(),
+        FileAllowed(images, 'Только изображение!')
+    ])
 
 # Форма входа на сайт для пользователей из детских учреждений
 class LoginForm(FlaskForm):
@@ -79,11 +90,11 @@ class AddClubForm(FlaskForm):
     building = StringField('Номер строения', validators=[DataRequired()])
     room = StringField('Кабинет')
     #hours = FieldList(FormField(OfficeHours), min_entries=1, max_entries=1, label = 'Время работы')
-    url_logo = StringField('Логотип')
+    #url_logo = FormField(UploadLogoForm)
     ages = FormField(AgesForm, label = 'Возраст')
     categories = FormField(CategoriesForm, label = 'Категория')
     tags = StringField('Тэги', validators=[DataRequired()])
-    #photos = StringField('Ссылки на фото', validators=[DataRequired()])
+    #photos = FormField(UploadPhotoForm)
     submit = SubmitField('Добавить кружок')
 
 # Форма выбора города при поиске десткого учреждения на всех страницах

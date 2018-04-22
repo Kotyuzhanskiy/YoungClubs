@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from app import app
-from app.controllers.forms import LoginForm, SearchForm, SignUpForm, AdvancedSearchForm, AddClubForm, CityForm
+from app.controllers.forms import LoginForm, SearchForm, SignUpForm, AdvancedSearchForm, AddClubForm
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
 from app.models.models import User, Club, Age, Category, Tag, Photo
@@ -113,9 +113,7 @@ def addclub():
             room=form.room.data,
             #start=form.start.data,
             #finish=form.finish.data,
-            url_logo=form.url_logo.data,
             institution=form.institution.data
-            #photos=form.photos.data,
             )
         #new_institution = Institution(
         #    name=form.institution.data
@@ -186,3 +184,8 @@ def updateclub():
         """
         , id = id, name=name, institution=institution, leader=leader, price=price)
     return redirect (url_for('account'))
+
+@app.route('/club/<club_id>', methods=['GET'])
+def getclub(club_id):
+    club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
+    return render_template('getclub.html', title='Информация о кружке', club=club)

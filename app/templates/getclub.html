@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+            <h1><b></b> {{  club.name  }}</h1>
+            <p><b>Преподаватель:</b> {{ club.leader }}</p>
+            <p><b>Описание:</b> {{ club.description }}</p>
+            <p><b>Город:</b> Краматорск </p>
+            <p><b>Адрес:</b> {{ club.street }}, {{ club.building }}, кабинет {{ club.room }} </p>
+            <p><b>Цена:</b> {{ club.price }}</p>
+            <p><b>Телефон:</b> {{ club.phone }}</p>
+            <p><b>Web:</b> {{ club.web }}</p>
+            <p><b>E-mail:</b> {{ club.email }}</p>
+            <p><b>Страница в социальной сети:</b> {{ club.social }}</p>
+{% endblock %}
