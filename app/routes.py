@@ -202,7 +202,7 @@ def updateclub():
 def getclub(club_id):
     club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
     return render_template('getclub.html', title='Информация о кружке', club=club)
-        , id = id, name=name, institution=institution, leader=leader, price=price,
-        snippet=snippet, description=description, phone=phone, web=web, email=email,
-        social=social, street=street, building=building, room=room, url_logo=url_logo)
+    #    , id = id, name=name, institution=institution, leader=leader, price=price,
+    #    snippet=snippet, description=description, phone=phone, web=web, email=email,
+    #    social=social, street=street, building=building, room=room, url_logo=url_logo)
     return redirect (url_for('account'))
