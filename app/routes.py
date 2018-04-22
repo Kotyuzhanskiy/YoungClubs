@@ -177,10 +177,23 @@ def updateclub():
     institution = request.form.get('institution')
     leader = request.form.get('leader')
     price = request.form.get('price')
+    snippet = request.form.get('snippet')
+    description = request.form.get('description')
+
+    phone = request.form.get('phone')
+    web = request.form.get('web')
+    email = request.form.get('email')
+    social = request.form.get('social')
+    street = request.form.get('street')
+    building = request.form.get('building')
+    room = request.form.get('room')
 
     club_update = db.engine.execute(
         """
-            UPDATE clubs SET name=:name, institution=:institution, leader=:leader, price=:price WHERE id = :id
+            UPDATE clubs SET name=:name, institution=:institution, leader=:leader,
+            price=:price, snippet=:snippet, description=:description, phone=:phone, web=:web, email=:email,
+            social=:social, street=:street, building=:building, room=:room, url_logo=:url_logo
+            WHERE id = :id
         """
         , id = id, name=name, institution=institution, leader=leader, price=price)
     return redirect (url_for('account'))
@@ -189,3 +202,7 @@ def updateclub():
 def getclub(club_id):
     club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
     return render_template('getclub.html', title='Информация о кружке', club=club)
+        , id = id, name=name, institution=institution, leader=leader, price=price,
+        snippet=snippet, description=description, phone=phone, web=web, email=email,
+        social=social, street=street, building=building, room=room, url_logo=url_logo)
+    return redirect (url_for('account'))
