@@ -10,10 +10,10 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 images = UploadSet('images', IMAGES)
 
 # Форма загрузки изображения
-class UploadLogoForm(FlaskForm):
+class UploadForm(FlaskForm):
     upload = FileField('image', validators=[
         FileRequired(),
-        FileAllowed(images, 'Только изображение!')
+        FileAllowed(images, 'Images only!')
     ])
 
 # Форма входа на сайт для пользователей из детских учреждений
@@ -90,7 +90,7 @@ class AddClubForm(FlaskForm):
     building = StringField('Номер строения', validators=[DataRequired()])
     room = StringField('Кабинет')
     #hours = FieldList(FormField(OfficeHours), min_entries=1, max_entries=1, label = 'Время работы')
-    #url_logo = FormField(UploadLogoForm)
+    #url_logo = FormField(UploadForm)
     ages = FormField(AgesForm, label = 'Возраст')
     categories = FormField(CategoriesForm, label = 'Категория')
     tags = StringField('Тэги', validators=[DataRequired()])
@@ -103,10 +103,3 @@ class CityForm(FlaskForm):
         'Выберите Ваш город',
         choices=[('К', 'Краматорск'), ('С', 'Славянск'), ('Д', 'Дружковка')]
     )
-
-#class CityForm(FlaskForm):
-#    city_id = SelectField(u'Group', coerce=int)
-#def edit_city(request, id):
-#    city = city.query.get(id)
-#    form = CityForm(request.POST, obj=city)
-#    form.city_id.choices = [(c.id, c.name) for c in Group.query.order_by('city')]

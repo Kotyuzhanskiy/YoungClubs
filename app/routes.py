@@ -9,25 +9,11 @@ from app import db
 from app.controllers.fn import format_tags, format_form_list, SimpleSearch, AdvancedSearch
 from pprint import pprint
 
-#Функция загрузки других функций при отображении любой страницы
-#@app.before_request
-#def before_request():
-#    cityform = CityForm()
-#    print('--------------DEBUG-1--------------')
-#    print(cityform)
-#    return CityForm()
-
-#@app.context_processor
-#def utility_processor(methods=['GET', 'POST']):
-#    cityform = CityForm()
-#    return dict(cityform=cityform)
-
 #Главная страница
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = SearchForm()
-    #form2 = AdvancedSearchForm()
     return render_template('index.html', title='Добро пожаловать', form=form)
 
 #Страница найденных результатов поиска
@@ -37,9 +23,8 @@ def search():
     if form.validate_on_submit():
         search_value = form.search.data
         clubs_search_results = SimpleSearch(search_value)
+        pprint(clubs_search_results)
         return render_template('search.html', title='Результаты поиска учреждений', clubs_search_results=clubs_search_results)
-    flash('Search for sucsessful!!!')
-    #form = AdvancedSearchForm()
     return render_template('search.html', title='Результаты поиска учреждений', clubs=None)
 
 #Страница входа для зарегистрированных пользователей из детских учреждений
@@ -94,7 +79,6 @@ def signup():
 @app.route('/addclub', methods=['GET', 'POST'])
 @login_required
 def addclub():
-    #TO DO
     form = AddClubForm()
     if form.validate_on_submit():
         new_club = Club(
@@ -111,16 +95,8 @@ def addclub():
             street=form.street.data,
             building=form.building.data,
             room=form.room.data,
-            #start=form.start.data,
-            #finish=form.finish.data,
             institution=form.institution.data
             )
-        #new_institution = Institution(
-        #    name=form.institution.data
-        #    )
-        db.session.add(new_club)
-        #db.session.add(new_institution)
-        #new_institution.clubs.append(new_club)
         db.session.add(new_club)
         #Добавление тэгов для клуба в БД
         new_tags_list = format_tags(form.tags.data)
@@ -152,7 +128,6 @@ def addclub():
                 new_club.ages.append(new_age)
             else:
                 new_club.ages.append(row)
-        #Добавление времени работы для кружка в БД
         db.session.commit()#Подтверждение записи в таблицы БД
         return redirect(url_for('account'))
     return render_template('addclub.html', title='Добавление нового кружка', form=form)
@@ -179,7 +154,6 @@ def updateclub():
     price = request.form.get('price')
     snippet = request.form.get('snippet')
     description = request.form.get('description')
-
     phone = request.form.get('phone')
     web = request.form.get('web')
     email = request.form.get('email')
@@ -200,9 +174,12 @@ def updateclub():
 
 @app.route('/club/<club_id>', methods=['GET'])
 def getclub(club_id):
-    club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
-    return render_template('getclub.html', title='Информация о кружке', club=club)
-        , id = id, name=name, institution=institution, leader=leader, price=price,
-        snippet=snippet, description=description, phone=phone, web=web, email=email,
-        social=social, street=street, building=building, room=room, url_logo=url_logo)
-    return redirect (url_for('account'))
+    club = db.session.query(Club).filter(Club.id == club_id).all()
+    ages = db.session.query(Age).filter(Age.clubs.any(Club.id==club))
+    pprint(ages)
+    #club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
+    return render_template('getclub.html', title='Информация о кружке', club=club, ages=ages)
+    #    , id = id, name=name, institution=institution, leader=leader, price=price,
+    #    snippet=snippet, description=description, phone=phone, web=web, email=email,
+    #    social=social, street=street, building=building, room=room, url_logo=url_logo)
+    #return redirect (url_for('account'))

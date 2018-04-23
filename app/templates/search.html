@@ -2,27 +2,17 @@
 
 {% block content %}
     <h1>Результаты поиска учреждений</h1>
-    {% if clubs_search_results%}
-        <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Имя клуба</th>
-                <th>Короткое описание</th>
-                <th>Город</th>
-                <th>Короткое описание</th>
-              </tr>
-            </thead>
-            <tbody>
-                {% for item in clubs_search_results%}
-                    <tr>
-                        <td> <a href="/club/{{ item.id }}">{{ item.name }}</a> </td>
-                        <td>{{ item.snippet }}</td>
-                        <td>Краматорск</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    {% if clubs_search_results != None %}
+        {% for club in clubs_search_results%}
+            <h1><b></b><a href="/club/{{ club.id }}">{{ club.name }}</a></h1>
+            <p><b>{{ club.snippet }}</p>
+            <p><b>г. Краматорск, ул. {{ club.street }}, {{ club.building }}, кабинет {{ club.room }} </p>
+            <p><b>Преподаватель:</b> {{ club.leader }}</p>
+            <p><b>Возраст:</b> {{ club.ages }}</p>
+            <p><a href="/club/{{ club.id }}">подробнее</a></p>
+
+        {% endfor %}
     {% else %}
-        <p>к сожалению, по Вашему запросу ничпго не найдено</p>
+        <p>К сожалению, по Вашему запросу ничпго не найдено</p>
     {% endif %}
-{% endblock %}{{ field.label }}
+{% endblock %}

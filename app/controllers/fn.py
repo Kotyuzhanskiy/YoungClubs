@@ -21,6 +21,7 @@ def format_form_list(item_dict):
 def SimpleSearch(search_value):
     x = Club.query.join(Club.tags, aliased=True).filter(Tag.name.like('%' + search_value + '%'))
     return x
+
 #Функция расширенного поиска по различным полям (категория, возраст, тэги)
 def AdvancedSearch(search_value):
     print('f')
