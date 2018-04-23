@@ -6,7 +6,10 @@
             <p><b>Описание:</b> {{ item.description }}</p>
             <p><b>Учреждение:</b> {{ item.institution }}</p>
             <p><b>Преподаватель:</b> {{ item.leader }}</p>
-            <p><b>Возраст:</b> {{ item.ages }}</p>
+            <p><b>Возраст:</b></p>
+            {% for i in club_ages %}
+                <p>{{ i.name }} </p>
+            {% endfor %}
             <p><b>Город:</b> Краматорск </p>
             <p><b>Адрес:</b> {{ item.street }}, {{ item.building }}, кабинет {{ item.room }} </p>
             <p><b>Цена:</b> {{ item.price }}</p>
@@ -14,5 +17,5 @@
             <p><b>Web:</b> {{ item.web }}</p>
             <p><b>E-mail:</b> {{ item.email }}</p>
             <p><b>Страница в социальной сети:</b> {{ item.social }}</p>
-             {% endfor %}
+            {% endfor %}
 {% endblock %}

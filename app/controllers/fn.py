@@ -19,9 +19,10 @@ def format_form_list(item_dict):
 
 #Функция поиска с Главной странице по одной строке
 def SimpleSearch(search_value):
-    x = Club.query.join(Club.tags, aliased=True).filter(Tag.name.like('%' + search_value + '%'))
-    return x
+    clubs = Club.query.join(Club.tags, aliased=True).filter(Tag.name.like('%' + search_value + '%'))
+    return clubs
 
-#Функция расширенного поиска по различным полям (категория, возраст, тэги)
-def AdvancedSearch(search_value):
-    print('f')
+#Функция поиска возраста определенного клуба
+def AgeSearch(club_id):
+    club_ages = Age.query.join(Age.clubs, aliased=True).filter(Club.id == club_id).all()
+    return club_ages

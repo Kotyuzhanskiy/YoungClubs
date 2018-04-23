@@ -25,8 +25,8 @@ class LoginForm(FlaskForm):
 
 # Форма поиска детских учреждений на главной странице для анонимных пользователей
 class SearchForm(FlaskForm):
-    search = StringField('Я хочу, чтобы мой ребенок занимался', validators=[DataRequired()])
-    submit = SubmitField('Найти учреждение')
+    search = StringField('Мой ребенок хочет заниматься, я ищу:', validators=[DataRequired()])
+    submit = SubmitField('Найти кружки')
 
 # Форма регистрации пользователей из детских учреждений
 class SignUpForm(FlaskForm):
@@ -54,10 +54,10 @@ class CategoriesForm(FlaskForm):
 
 # Базовая форма возрастов
 class AgesForm(FlaskForm):
-    fromto5 = BooleanField('До 5 лет')
-    from6to9 = BooleanField('От 6 до 9 лет')
-    from10to14 = BooleanField('От 10 до 14 лет')
-    from15to18 = BooleanField('От 15 до 18 лет')
+    fromto5 = BooleanField(label='До 5 лет')
+    from6to9 = BooleanField(label='От 6 до 9 лет')
+    from10to14 = BooleanField(label='От 10 до 14 лет')
+    from15to18 = BooleanField(label='От 15 до 18 лет')
 
 # Форма расширенного поиска детских учреждений на странице найденных учреждений для анонимных пользователей
 class AdvancedSearchForm(FlaskForm):

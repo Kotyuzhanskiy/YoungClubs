@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Результаты поиска учреждений</h1>
     {% if clubs_search_results != None %}
-        {% for club in clubs_search_results%}
-            <h1><b></b><a href="/club/{{ club.id }}">{{ club.name }}</a></h1>
+    <h1>Результаты поиска кружков по запросу "{{ search_value }}":</h1>
+        {% for club in clubs_search_results %}
+            <h1><b></b><a href="/club/{{ club.id }}">"{{ club.name }}"</a></h1>
             <p><b>{{ club.snippet }}</p>
             <p><b>г. Краматорск, ул. {{ club.street }}, {{ club.building }}, кабинет {{ club.room }} </p>
             <p><b>Преподаватель:</b> {{ club.leader }}</p>
+            <p><b>Телефон:</b> {{ club.phone }}</p>
             <p><b>Возраст:</b> {{ club.ages }}</p>
-            <p><a href="/club/{{ club.id }}">подробнее</a></p>
-
+            <p><b>подробнее о </b><a href="/club/{{ club.id }}">"{{ club.name }}"</a></p>
         {% endfor %}
     {% else %}
-        <p>К сожалению, по Вашему запросу ничпго не найдено</p>
+        <p>К сожалению, по Вашему запросу "{{ search_value }}" ничего не найдено</p>
     {% endif %}
 {% endblock %}

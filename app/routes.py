@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
 from app.models.models import User, Club, Age, Category, Tag, Photo
 from app import db
-from app.controllers.fn import format_tags, format_form_list, SimpleSearch, AdvancedSearch
+from app.controllers.fn import format_tags, format_form_list, SimpleSearch, AgeSearch
 from pprint import pprint
 
 #Главная страница
@@ -24,8 +24,11 @@ def search():
         search_value = form.search.data
         clubs_search_results = SimpleSearch(search_value)
         pprint(clubs_search_results)
-        return render_template('search.html', title='Результаты поиска учреждений', clubs_search_results=clubs_search_results)
-    return render_template('search.html', title='Результаты поиска учреждений', clubs=None)
+        return render_template(
+            'search.html', title='Результаты поиска учреждений',
+            clubs_search_results=clubs_search_results, search_value=search_value
+            )
+    return render_template('search.html', title='Результаты поиска учреждений', clubs_search_results=None)
 
 #Страница входа для зарегистрированных пользователей из детских учреждений
 @app.route('/login', methods=['GET', 'POST'])
@@ -161,7 +164,6 @@ def updateclub():
     street = request.form.get('street')
     building = request.form.get('building')
     room = request.form.get('room')
-
     club_update = db.engine.execute(
         """
             UPDATE clubs SET name=:name, institution=:institution, leader=:leader,
@@ -175,8 +177,6 @@ def updateclub():
 @app.route('/club/<club_id>', methods=['GET'])
 def getclub(club_id):
     club = db.session.query(Club).filter(Club.id == club_id).all()
-    ages = db.session.query(Age).filter(Age.clubs.any(Club.id==club))
-    pprint(ages)
+    club_ages = AgeSearch(club_id)
     #club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
-    return render_template('getclub.html', title='Информация о кружке', club=club, ages=ages)
-
+    return render_template('getclub.html', title='Информация о кружке', club=club, club_ages=club_ages)

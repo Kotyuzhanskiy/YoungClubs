@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Привет, Team-2!</h1>
     <form action="/search" method="post">
         {{ form.hidden_tag() }}
         <p>
             {{ form.search.label }}<br>
-            {{ form.search(size=32) }}<br>
+            {{ form.search(size=48) }}<br>
             {% for error in form.search.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
