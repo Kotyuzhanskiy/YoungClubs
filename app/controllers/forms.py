@@ -25,7 +25,7 @@ class LoginForm(FlaskForm):
 
 # Форма поиска детских учреждений на главной странице для анонимных пользователей
 class SearchForm(FlaskForm):
-    search = StringField('Мой ребенок хочет заниматься, я ищу:', validators=[DataRequired()])
+    search = StringField('Моему ребенку интересны', validators=[DataRequired()])
     submit = SubmitField('Найти кружки')
 
 # Форма регистрации пользователей из детских учреждений
