@@ -38,10 +38,10 @@ def load_user(id):
 #МОДЕЛЬ БАЗЫ ДАННЫХ ДЕТСКИХ КРУЖКОВ
 
 #ассоциативная таблица для связи Club-Ages
-association_table_ages = db.Table('association_ages', db.metadata,
-    db.Column('clubs_id', db.Integer, db.ForeignKey('clubs.id')),
-    db.Column('ages_id', db.Integer, db.ForeignKey('ages.id'))
-)
+#association_table_ages = db.Table('association_ages', db.metadata,
+#    db.Column('clubs_id', db.Integer, db.ForeignKey('clubs.id')),
+#    db.Column('ages_id', db.Integer, db.ForeignKey('ages.id'))
+#)
 
 #ассоциативная таблица для связи Club-Category
 association_table_categories = db.Table('association_categories', db.metadata,
@@ -80,13 +80,15 @@ class Club(db.Model):
     url_logo = db.Column(db.String(300), index=False, unique=False)
     reg_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     last_edit_date = db.Column(db.DateTime, index=True, unique=False)
-    #institution_id = db.Column(db.Integer, db.ForeignKey('institutions.id'))
-    #institution = db.relationship("Institution", back_populates='clubs')
     institution = db.Column(db.String(300), index=False, unique=False)
-    ages = db.relationship("Age", secondary=association_table_ages, back_populates='clubs', lazy='dynamic')
+    ages_from = db.Column(db.Integer, index=False, unique=False)
+    ages_to = db.Column(db.Integer, index=False, unique=False)
     categories = db.relationship("Category", secondary=association_table_categories, back_populates='clubs', lazy='dynamic')
     tags = db.relationship("Tag", secondary=association_table_tags, back_populates='clubs', lazy='dynamic')
     photos = db.relationship("Photo", back_populates="club", lazy='dynamic')
+    #ages = db.relationship("Age", secondary=association_table_ages, back_populates='clubs', lazy='dynamic')
+    #institution_id = db.Column(db.Integer, db.ForeignKey('institutions.id'))
+    #institution = db.relationship("Institution", back_populates='clubs')
 
     #Таблица учреждений
 #class Institution(db.Model):
@@ -96,13 +98,13 @@ class Club(db.Model):
 #    clubs = db.relationship('Club', back_populates="institution")
 
     #Таблица возраста
-class Age(db.Model):
-    __tablename__ = 'ages'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(300), index=True, unique=False)
-    age_from = db.Column(db.Integer, index=False, unique=False)
-    age_to = db.Column(db.Integer, index=False, unique=False)
-    clubs = db.relationship("Club", secondary=association_table_ages, back_populates='ages')
+#class Age(db.Model):
+#    __tablename__ = 'ages'
+#    id = db.Column(db.Integer, primary_key=True)
+#    name = db.Column(db.String(300), index=True, unique=False)
+#    age_from = db.Column(db.Integer, index=False, unique=False)
+#    age_to = db.Column(db.Integer, index=False, unique=False)
+#    clubs = db.relationship("Club", secondary=association_table_ages, back_populates='ages')
 
     #Таблица категорий клубов
 class Category(db.Model):

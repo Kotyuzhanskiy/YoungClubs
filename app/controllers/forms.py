@@ -1,7 +1,7 @@
 # Данный файл содержит формы, которые отображаются на страницах сайта
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateTimeField, PasswordField, BooleanField, SubmitField, SelectField, FormField, FieldList, TextField
+from wtforms import StringField, IntegerField, DateTimeField, PasswordField, BooleanField, SubmitField, SelectField, FormField, FieldList, TextField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from app.models.models import User
 from flask_uploads import UploadSet, IMAGES
@@ -89,13 +89,14 @@ class AddClubForm(FlaskForm):
     street = StringField('Улица', validators=[DataRequired()])
     building = StringField('Номер строения', validators=[DataRequired()])
     room = StringField('Кабинет')
-    #hours = FieldList(FormField(OfficeHours), min_entries=1, max_entries=1, label = 'Время работы')
-    #url_logo = FormField(UploadForm)
-    ages = FormField(AgesForm, label = 'Возраст')
+    ages_from = IntegerField('Возраст от', validators=[DataRequired()])
+    ages_to = IntegerField('Возраст до', validators=[DataRequired()])
     categories = FormField(CategoriesForm, label = 'Категория')
     tags = StringField('Тэги', validators=[DataRequired()])
-    #photos = FormField(UploadPhotoForm)
     submit = SubmitField('Добавить кружок')
+    #hours = FieldList(FormField(OfficeHours), min_entries=1, max_entries=1, label = 'Время работы')
+    #url_logo = FormField(UploadForm)
+    #photos = FormField(UploadPhotoForm)
 
 # Форма выбора города при поиске десткого учреждения на всех страницах
 class CityForm(FlaskForm):

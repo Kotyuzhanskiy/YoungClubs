@@ -4,9 +4,9 @@ from app import app
 from app.controllers.forms import LoginForm, SearchForm, SignUpForm, AdvancedSearchForm, AddClubForm
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
-from app.models.models import User, Club, Age, Category, Tag, Photo
+from app.models.models import User, Club, Category, Tag, Photo
 from app import db
-from app.controllers.fn import format_tags, format_form_list, SimpleSearch, AgeSearch
+from app.controllers.fn import format_tags, format_form_list, SimpleSearch, SimpleSearch2
 from pprint import pprint
 
 #Главная страница
@@ -22,13 +22,13 @@ def search():
     form = SearchForm()
     if form.validate_on_submit():
         search_value = form.search.data
-        clubs_search_results = SimpleSearch(search_value)
-        pprint(clubs_search_results)
+        (clubs_search_results, n) = SimpleSearch(search_value)
+        pprint(n)
         return render_template(
             'search.html', title='Результаты поиска учреждений',
-            clubs_search_results=clubs_search_results, search_value=search_value
+            clubs_search_results=clubs_search_results, search_value=search_value, n=n
             )
-    return render_template('search.html', title='Результаты поиска учреждений', clubs_search_results=None)
+    return render_template('search.html', title='Результаты поиска учреждений')
 
 #Страница входа для зарегистрированных пользователей из детских учреждений
 @app.route('/login', methods=['GET', 'POST'])
@@ -98,7 +98,9 @@ def addclub():
             street=form.street.data,
             building=form.building.data,
             room=form.room.data,
-            institution=form.institution.data
+            institution=form.institution.data,
+            ages_from=form.ages_from.data,
+            ages_to=form.ages_to.data
             )
         db.session.add(new_club)
         #Добавление тэгов для клуба в БД
@@ -122,15 +124,15 @@ def addclub():
             else:
                 new_club.categories.append(row)
         #Добавление возрастов для кружка в БД
-        new_age_list = format_form_list(form.ages.data)
-        for age in new_age_list:
-            row = Age.query.filter_by(name=age).first()
-            if row == None:
-                new_age = Age(name=age)
-                db.session.add(new_age)
-                new_club.ages.append(new_age)
-            else:
-                new_club.ages.append(row)
+        #new_age_list = format_form_list(form.ages.data)
+        #for age in new_age_list:
+        #    row = Age.query.filter_by(name=age).first()
+        #    if row == None:
+        #        new_age = Age(name=age)
+        #        db.session.add(new_age)
+        #        new_club.ages.append(new_age)
+        #    else:
+        #        new_club.ages.append(row)
         db.session.commit()#Подтверждение записи в таблицы БД
         return redirect(url_for('account'))
     return render_template('addclub.html', title='Добавление нового кружка', form=form)
@@ -177,6 +179,6 @@ def updateclub():
 @app.route('/club/<club_id>', methods=['GET'])
 def getclub(club_id):
     club = db.session.query(Club).filter(Club.id == club_id).all()
-    club_ages = AgeSearch(club_id)
+    #club_ages = AgeSearch(club_id)
     #club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
-    return render_template('getclub.html', title='Информация о кружке', club=club, club_ages=club_ages)
+    return render_template('getclub.html', title='Информация о кружке', club=club)
