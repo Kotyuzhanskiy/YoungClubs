@@ -2,7 +2,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, DateTimeField, PasswordField, BooleanField, SubmitField, SelectField, FormField, FieldList, TextField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, URL
 from app.models.models import User
 from flask_uploads import UploadSet, IMAGES
 from flask_wtf.file import FileField, FileAllowed, FileRequired
@@ -25,7 +25,9 @@ class LoginForm(FlaskForm):
 
 # Форма поиска детских учреждений на главной странице для анонимных пользователей
 class SearchForm(FlaskForm):
-    search = StringField('Мой ребенок хочет заниматься, я ищу:', validators=[DataRequired()])
+    search = StringField('Моему ребенку интересны',
+    description = '''укажите область интересов Вашего ребенка''',
+    validators=[DataRequired()])
     submit = SubmitField('Найти кружки')
 
 # Форма регистрации пользователей из детских учреждений
@@ -76,23 +78,97 @@ class OfficeHours(FlaskForm):
 
 # Форма добавления детского учреждения в аккаунте пользователя
 class AddClubForm(FlaskForm):
-    name = StringField('Название кружка', validators=[DataRequired()])
-    institution = StringField('Учреждение', validators=[DataRequired()])
-    snippet = StringField('Краткое описание кружка', validators=[DataRequired()])
-    description = StringField('Полное описание кружка', validators=[DataRequired()])
-    leader = StringField('Преподаватель', validators=[DataRequired()])
-    price = StringField('Цена', validators=[DataRequired()])
-    phone = StringField('Телефон', validators=[DataRequired()])
-    web = StringField('WEB-страница')
-    email = StringField('Электронная почта')
-    social = StringField('Страница в социальной сети')
-    street = StringField('Улица', validators=[DataRequired()])
-    building = StringField('Номер строения', validators=[DataRequired()])
-    room = StringField('Кабинет')
-    ages_from = IntegerField('Возраст от', validators=[DataRequired()])
-    ages_to = IntegerField('Возраст до', validators=[DataRequired()])
-    categories = FormField(CategoriesForm, label = 'Категория')
-    tags = StringField('Тэги', validators=[DataRequired()])
+    name = StringField('Название кружка',
+        description = 'Укажите название для Вашего кружка',
+        validators=[DataRequired()]
+        )
+    institution = StringField('Учреждение',
+        description = '''Укажите учреждение, к которому принадлежит кружок.
+        Если кружок самостоятельный, оставьте это поле пустым'''
+        )
+    snippet = StringField('Краткое описание кружка',
+        description = '''Коротко опишите то, чем занимается кружок,
+        уделите внимание самым интересным направлениям кружка.
+        Эта информация появляется на странице поиска кружков,
+        что позволяет родителям делать выбор из предварительно найденного списка кружков.
+        Вы можете использовать не более 500 символов.''',
+        validators=[DataRequired(), Length(max=500)]
+        )
+    description = StringField('Полное описание кружка',
+        description = '''Опишите все направления деятельности Вашего кружка,
+        почему ребенку будет интересно заниматься именно в Вашем кружке. Какие выгоды получит
+        ребенок от занятий в кружке.
+        Расскажите о:\n
+        результатах и достижениях кружка (например, о победах в конкурсе);\n
+        о преподавателях кружка, об их опыте, знаниях, отзывах;\n
+        о специализированном оснащении (если оно используется в работе).\n
+        Вы можете использовать не более 10 000 символов.''',
+        validators=[DataRequired(), Length(max=10000)]
+        )
+    leader = StringField('Преподаватель',
+        description = '''Полностью укажите фамилию, отчество, преподавателя
+        (или преподавателей через запятую).''',
+        validators=[DataRequired(), Length(max=150)]
+        )
+    price = StringField('Цена',
+        description = '''Укажите стоимость посещения ребеноком кружка.
+        Если занятия не оплачиваются, укажите "бесплатно".''',
+        validators=[DataRequired(), Length(max=50)]
+        )
+    phone = StringField('Телефон',
+        description = '''Укажите телефон, по которому родители могут
+        позвонить дляя уточнения интересующих их вопросов.''',
+        validators=[DataRequired(), Length(max=30)]
+        )
+    web = StringField('WEB-страница',
+        description = '''Укажите (если есть) сайт в интернете, где родители могут
+        получить дополнительную информацию о работе Вашего кружка.
+        В этом поле обязательно http(s)://''',
+        validators=[URL()]
+        )
+    email = StringField('Электронная почта',
+        description = '''Укажите электронную почту для связи с Вашим кружком.''',
+        validators=[Email()]
+        )
+    social = StringField('Страница в социальной сети',
+        description = '''Укажите (если есть) страницу в сициальной сети, где родители могут
+        подробнее познакомиться с жизнью Вашего кружка.
+        В этом поле обязательно http(s)://''',
+        validators=[URL()]
+        )
+    street = StringField('Улица',
+        description = '''Укажите улицу, на которой расположен кружок''',
+        validators=[DataRequired()]
+        )
+    building = StringField('Номер строения',
+        description = '''Укажите номер дома, где которой расположен кружок''',
+        validators=[DataRequired()]
+        )
+    room = StringField('Кабинет',
+        description = '''Укажите номер кабинета (комнаты или др.), где которой расположен кружок.
+        Если кружок расположен не в отдбеном кабеине, Вы можете оставить это поле пустым'''
+        )
+    ages_from = IntegerField('Возраст от',
+        description = '''Укажите, с какого возраста дети могут посещать Ваш кружок''',
+        validators=[DataRequired()]
+        )
+    ages_to = IntegerField('Возраст до',
+        description = '''Укажите, до какого возраста дети могут посещать Ваш кружок''',
+        validators=[DataRequired()]
+        )
+    categories = FormField(CategoriesForm,
+        description = '''Укажите категрию, с которой связана деятельность кружка''',
+        label = 'Категория'
+        )
+    tags = StringField('Тэги',
+        description = '''Внесите список ключевых слов, с которыми связана деятельность кружка.
+        Это важное поле, потому как оно напрямую влияет на выдачу в поисковом запросе на главной странице.
+        Поэтому постарайтесь учесть и указать все возможные варианты, которые могут быть использованы родителями
+        при поиске. Например, для танцевального клуба, также укажите список танцев, которыми может заниматься
+        в Вашем кружке.
+        Ключевые слова необходимо вносить маленькими буквами, в именительном падеже, разделяя их запятыми''',
+        validators=[DataRequired()]
+        )
     submit = SubmitField('Добавить кружок')
     #hours = FieldList(FormField(OfficeHours), min_entries=1, max_entries=1, label = 'Время работы')
     #url_logo = FormField(UploadForm)
