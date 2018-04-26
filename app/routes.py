@@ -1,13 +1,22 @@
-# -*- coding: utf-8 -*-
-from flask import render_template, flash, redirect, url_for, request, jsonify
+import os
+from flask import Flask, render_template, flash, redirect, url_for, request, jsonify, send_from_directory
 from app import app
 from app.controllers.forms import LoginForm, SearchForm, SignUpForm, AdvancedSearchForm, AddClubForm
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
 from app.models.models import User, Club, Category, Tag
+from werkzeug.utils import secure_filename
 from app import db
 from app.controllers.fn import format_tags, format_form_list, SimpleSearch, SimpleSearch2
 from pprint import pprint
+
+
+###       ПОМЕНЯТЬ ПУТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+UPLOAD_FOLDER = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/logo/'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #Главная страница
 @app.route('/', methods=['GET', 'POST'])
@@ -60,7 +69,23 @@ def logout():
 def account():
     #выбор из clubs и institution. похожие названия колонок переименовывать "i.name as name_i"
     #user_select = db.engine.execute("SELECT c.*, i.name as name_i FROM clubs c INNER JOIN institutions i ON c.institution_id = i.id WHERE user_id = :user_id", user_id=current_user.id)
-    user_select = db.engine.execute("SELECT * FROM clubs WHERE user_id = :user_id", user_id=current_user.id)
+    user_select = db.engine.execute("SELECT * FROM clubs WHERE user_id = :user_id", user_id=current_user.id).fetchall()
+    #кол-во выбранных записей
+#    count_select = db.engine.execute("SELECT COUNT(id) FROM clubs WHERE user_id = :user_id", user_id=current_user.id).fetchone()[0]
+#    print(count_select)
+#    print('user_select')
+#    i = 1
+#    while i < count_select:
+#        print(user_select[i].url_logo)
+#        logo = user_select[i].url_logo
+#        print('logo=', logo)
+#        print('i=', i)
+#        if logo != None:
+#            logo = uploads(logo)
+#            print('logo2=', logo)
+#            user_select[i].url_logo = uploads(logo)
+#            print(user_select[i].url_logo)
+#        i = i + 1
     return render_template('account.html', title='Управление кружками пользователя', user_select=user_select)
 
 #Страница регистрации пользователя из детских учреждений
@@ -102,6 +127,7 @@ def addclub():
             ages_from=form.ages_from.data,
             ages_to=form.ages_to.data
             )
+
         db.session.add(new_club)
         #Добавление тэгов для клуба в БД
         new_tags_list = format_tags(form.tags.data)
@@ -134,8 +160,37 @@ def addclub():
         #    else:
         #        new_club.ages.append(row)
         db.session.commit()#Подтверждение записи в таблицы БД
-        return redirect(url_for('account'))
+        return render_template('addlogo.html')
     return render_template('addclub.html', title='Добавление нового кружка', form=form)
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/addlogo', methods=['GET', 'POST'])
+@login_required
+def addlogo():
+    if request.method == 'POST':
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        else:
+            filename = 'logo-ghostbuster.jpg'
+        last_id = db.engine.execute("SELECT MAX(id) FROM clubs").fetchone()[0]
+        db.engine.execute("UPDATE clubs SET url_logo=:url_logo WHERE id = :id", id=last_id, url_logo=filename)
+        print('file=', filename)
+        uploads(filename)
+        print('up_file=')
+        return redirect(url_for('account'))
+#    else:
+#        print('222222222222')
+#        return render_template('addlogo.html')
+
+@app.route('/uploads/<filename>')
+def uploads(filename):
+    print('upload')
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/editclub/<club_id>', methods=['GET'])
 @login_required
@@ -183,3 +238,4 @@ def getclub(club_id):
     #club_ages = AgeSearch(club_id)
     #club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
     return render_template('getclub.html', title='Информация о кружке', club=club)
+
