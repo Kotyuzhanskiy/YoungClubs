@@ -13,7 +13,7 @@ from pprint import pprint
 
 ###       ПОМЕНЯТЬ ПУТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-UPLOAD_FOLDER = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/logo/'
+UPLOAD_FOLDER = '/home/ubuntu/workspace/YouthClubs/app/logo/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -127,7 +127,6 @@ def addclub():
             ages_from=form.ages_from.data,
             ages_to=form.ages_to.data
             )
-
         db.session.add(new_club)
         #Добавление тэгов для клуба в БД
         new_tags_list = format_tags(form.tags.data)

@@ -5,6 +5,7 @@
     <h1>Результаты поиска кружков по запросу "{{ search_value }}":</h1>
         {% for club in clubs_search_results %}
             <h1><b></b><a href="/club/{{ club.id }}">"{{ club.name }}"</a></h1>
+            <p><b><img src="/uploads/{{club.url_logo}}" height="100" alt="Логотип"></p>
             <p><b>{{ club.snippet }}</p>
             <p><b>г. Краматорск, ул. {{ club.street }}, {{ club.building }}, кабинет {{ club.room }} </p>
             <p><b>Возраст: от</b> {{ club.ages_from }} до {{ club.ages_to }} лет</p>

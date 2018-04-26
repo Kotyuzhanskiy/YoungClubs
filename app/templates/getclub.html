@@ -3,6 +3,7 @@
 {% block content %}
             {% for item in club %}
             <h1><b></b> {{  item.name  }}</h1>
+            <p><b><img src="/uploads/{{item.url_logo}}" height="200" alt="Логотип"></p>
             <p><b>Описание: </b> {{ item.description }}</p>
             <p><b>Учреждение: </b> {{ item.institution }}</p>
             <p><b>Преподаватель: </b> {{ item.leader }}</p>
