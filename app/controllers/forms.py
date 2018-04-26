@@ -169,7 +169,11 @@ class AddClubForm(FlaskForm):
         Ключевые слова необходимо вносить маленькими буквами, в именительном падеже, разделяя их запятыми''',
         validators=[DataRequired()]
         )
+<<<<<<< HEAD
  #   submit = SubmitField('Добавить кружок')
+=======
+    submit = SubmitField('Добавить кружок')
+>>>>>>> 0119c468ad8635129ab334cf9cf0dd278a640303
     #hours = FieldList(FormField(OfficeHours), min_entries=1, max_entries=1, label = 'Время работы')
     #url_logo = FormField(UploadForm)
     #photos = FormField(UploadPhotoForm)

@@ -4,7 +4,10 @@ from app import app
 from app.controllers.forms import LoginForm, SearchForm, SignUpForm, AdvancedSearchForm, AddClubForm
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
+<<<<<<< HEAD
 from werkzeug.utils import secure_filename
+=======
+>>>>>>> 0119c468ad8635129ab334cf9cf0dd278a640303
 from app.models.models import User, Club, Category, Tag, Photo
 from app import db
 from app.controllers.fn import format_tags, format_form_list, SimpleSearch, SimpleSearch2
@@ -237,4 +240,8 @@ def getclub(club_id):
     club = db.session.query(Club).filter(Club.id == club_id).all()
     #club_ages = AgeSearch(club_id)
     #club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
+<<<<<<< HEAD
     return render_template('getclub.html', title='Информация о кружке', club=club)
+=======
+    return render_template('getclub.html', title='Информация о кружке', club=club)
+>>>>>>> 0119c468ad8635129ab334cf9cf0dd278a640303
