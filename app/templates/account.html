@@ -9,10 +9,13 @@
         <li>изменить информацию о Ваших кружках кнопкой "Редактировать кружок"</li>
         <li>удалить кружок, если он уже не работает, кнопкой "Удалить кружок"</li>
     </ul>
+
+
     <form action="{{ url_for('addclub') }}">
         <table class="table table-striped">
             <thead>
               <tr>
+                <th></th>
                 <th>Учреждение</th>
                 <th>Название_кружка</th>
                 <th>Преподаватель</th>
@@ -26,6 +29,7 @@
             <tbody>
                 {% for item in user_select %}
                     <tr>
+                        <td><img src="/uploads/{{item.url_logo}}" width="30" height="35" alt="Логотип"></td>
                         <td>{{ item.institution }}</td>
                         <td>{{ item.name }}</td>
                         <td>{{ item.leader }}</td>
