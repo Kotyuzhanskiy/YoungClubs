@@ -127,7 +127,7 @@ class AddClubForm(FlaskForm):
         validators=[URL()]
         )
     email = StringField('Электронная почта',
-        description = '''Укажите электронную почту для связи с Вашим кружком.''',
+        description = '''Укажите (если есть) электронную почту для связи с Вашим кружком.''',
         validators=[Email()]
         )
     social = StringField('Страница в социальной сети',
@@ -157,7 +157,7 @@ class AddClubForm(FlaskForm):
         validators=[DataRequired()]
         )
     categories = FormField(CategoriesForm,
-        description = '''Укажите категрию, с которой связана деятельность кружка''',
+        description = '''Укажите категорию, с которой связана деятельность кружка''',
         label = 'Категория'
         )
     tags = StringField('Тэги',

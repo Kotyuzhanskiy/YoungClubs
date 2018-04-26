@@ -4,7 +4,7 @@ from app import app
 from app.controllers.forms import LoginForm, SearchForm, SignUpForm, AdvancedSearchForm, AddClubForm
 from flask_login import current_user, login_user, login_required, logout_user
 from werkzeug.urls import url_parse
-from app.models.models import User, Club, Category, Tag, Photo
+from app.models.models import User, Club, Category, Tag
 from app import db
 from app.controllers.fn import format_tags, format_form_list, SimpleSearch, SimpleSearch2
 from pprint import pprint
@@ -170,10 +170,11 @@ def updateclub():
         """
             UPDATE clubs SET name=:name, institution=:institution, leader=:leader,
             price=:price, snippet=:snippet, description=:description, phone=:phone, web=:web, email=:email,
-            social=:social, street=:street, building=:building, room=:room, url_logo=:url_logo
+            social=:social, street=:street, building=:building, room=:room
             WHERE id = :id
         """
-        , id = id, name=name, institution=institution, leader=leader, price=price)
+        , id = id, name=name, institution=institution, leader=leader, price=price, snippet=snippet, description=description, phone=phone, web=web, email=email,
+            social=social, street=street, building=building, room=room)
     return redirect (url_for('account'))
 
 @app.route('/club/<club_id>', methods=['GET'])

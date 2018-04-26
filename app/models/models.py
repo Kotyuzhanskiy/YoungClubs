@@ -85,7 +85,10 @@ class Club(db.Model):
     ages_to = db.Column(db.Integer, index=False, unique=False)
     categories = db.relationship("Category", secondary=association_table_categories, back_populates='clubs', lazy='dynamic')
     tags = db.relationship("Tag", secondary=association_table_tags, back_populates='clubs', lazy='dynamic')
-    photos = db.relationship("Photo", back_populates="club", lazy='dynamic')
+    url_photo_1 = db.Column(db.String(300), index=False, unique=False)
+    url_photo_2 = db.Column(db.String(300), index=False, unique=False)
+    url_photo_3 = db.Column(db.String(300), index=False, unique=False)
+    #photos = db.relationship("Photo", back_populates="club", lazy='dynamic')
     #ages = db.relationship("Age", secondary=association_table_ages, back_populates='clubs', lazy='dynamic')
     #institution_id = db.Column(db.Integer, db.ForeignKey('institutions.id'))
     #institution = db.relationship("Institution", back_populates='clubs')
@@ -121,9 +124,9 @@ class Tag(db.Model):
     clubs = db.relationship("Club", secondary=association_table_tags, back_populates='tags')
 
     #Таблица фото
-class Photo(db.Model):
-    __tablename__ = 'photos'
-    id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(300), index=False, unique=False)
-    club_id = db.Column(db.Integer, db.ForeignKey('clubs.id'))
-    club = db.relationship("Club", back_populates="photos")
+#class Photo(db.Model):
+#    __tablename__ = 'photos'
+#    id = db.Column(db.Integer, primary_key=True)
+#    url = db.Column(db.String(300), index=False, unique=False)
+#    club_id = db.Column(db.Integer, db.ForeignKey('clubs.id'))
+#    club = db.relationship("Club", back_populates="photos")

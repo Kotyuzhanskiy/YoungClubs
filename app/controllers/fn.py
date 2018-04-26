@@ -1,7 +1,7 @@
 # coding = utf-8
 from flask import Flask
 from app import db
-from app.models.models import User, Club, Category, Tag, Photo
+from app.models.models import User, Club, Category, Tag
 from sqlalchemy import Table, Column, Integer, ForeignKey, func
 from sqlalchemy.orm import relationship, session
 from pprint import pprint

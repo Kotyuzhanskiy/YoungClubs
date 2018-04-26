@@ -10,7 +10,6 @@
             <p><b>Возраст: от</b> {{ club.ages_from }} до {{ club.ages_to }} лет</p>
             <p><b>Преподаватель:</b> {{ club.leader }}</p>
             <p><b>Телефон:</b> {{ club.phone }}</p>
-            <p><b>Возраст:</b> {{ club.ages }}</p>
             <p><b>подробнее о </b><a href="/club/{{ club.id }}">"{{ club.name }}"</a></p>
         {% endfor %}
     {% else %}
