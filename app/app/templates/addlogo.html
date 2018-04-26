@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Страница добавления кружка</h1>
+
+        <form action="/addlogo" enctype="multipart/form-data" method="post">
+            <p>Загрузите Ваш логотип на сервер</p>
+            <p><input type="file" name="file" multiple accept="image/*,image/jpeg">
+            <input type="submit" value="Отправить"></p>
+        </form>
+
+{% endblock %}
+
+
+<!-- <a href="{{ '/addlogo' }}">Отправить</a>  -->

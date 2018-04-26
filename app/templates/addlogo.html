@@ -5,6 +5,33 @@
 
         <form action="/addlogo" enctype="multipart/form-data" method="post">
             <p>Загрузите Ваш логотип на сервер</p>
+<<<<<<< HEAD
+            <p><input type="file" name="file">
+            <input type="submit" value="Отправить"></p>
+        </form>
+
+        <form action="/addphoto" enctype="multipart/form-data" method="post">
+            <p>"Загрузите до трех фотографий"</p>
+            <p><input type="file" name="file1" multiple accept="image/*,image/jpeg"></p>
+            <p><input type="file" name="file2" multiple accept="image/*,image/jpeg"></p>
+            <p><input type="file" name="file3" multiple accept="image/*,image/jpeg"></p>
+            <p><input type="submit" value="Отправить"></p>
+        </form>
+
+{% endblock %}
+
+
+<!-- <a href="{{ '/addlogo' }}">Отправить</a>
+            <p>Загрузите Ваши фотографии (не более 3 штук) на сервер</p>
+            <p><input type="file" name="file1">
+            <p><input type="file" name="file2">
+            <p><input type="file" name="file3">
+            <input type="submit" value="Отправить"></p>
+
+
+
+-->
+=======
             <p><input type="file" name="file" multiple accept="image/*,image/jpeg">
             <input type="submit" value="Отправить"></p>
         </form>
@@ -13,3 +40,4 @@
 
 
 <!-- <a href="{{ '/addlogo' }}">Отправить</a>  -->
+>>>>>>> d25259931958628d77ab123e004d00fb28ecc921

@@ -1,0 +1,36 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - Youth Clubs</title>
+      {% else %}
+      <title>Youth Clubs</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>
+        <a href="{{ url_for('index') }}">Родителям</a>
+        <a href="{{ url_for('login') }}">Учреждениям</a>
+        {% if current_user.is_anonymous %}
+        {% else %}
+        <a href="{{ url_for('logout') }}">Выйти</a>
+        {% endif %}
+        </div>
+        <form action="" method="post">
+        {{ cityform.hidden_tag() }}
+        <p>
+            {{ cityform.city.label }} {{ cityform.city }}
+        </p>
+        </form>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>

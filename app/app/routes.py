@@ -10,15 +10,13 @@ from app import db
 from app.controllers.fn import format_tags, format_form_list, SimpleSearch, SimpleSearch2
 from pprint import pprint
 
+
 ###       ПОМЕНЯТЬ ПУТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-UPLOAD_FOLDER_LOG = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/logo/'
-UPLOAD_FOLDER_PHOTO = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/photo/'
+UPLOAD_FOLDER = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/logo/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
-app.config['UPLOAD_FOLDER_LOG'] = UPLOAD_FOLDER_LOG
-app.config['UPLOAD_FOLDER_PHOTO'] = UPLOAD_FOLDER_PHOTO
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #Главная страница
 @app.route('/', methods=['GET', 'POST'])
@@ -72,6 +70,22 @@ def account():
     #выбор из clubs и institution. похожие названия колонок переименовывать "i.name as name_i"
     #user_select = db.engine.execute("SELECT c.*, i.name as name_i FROM clubs c INNER JOIN institutions i ON c.institution_id = i.id WHERE user_id = :user_id", user_id=current_user.id)
     user_select = db.engine.execute("SELECT * FROM clubs WHERE user_id = :user_id", user_id=current_user.id).fetchall()
+    #кол-во выбранных записей
+#    count_select = db.engine.execute("SELECT COUNT(id) FROM clubs WHERE user_id = :user_id", user_id=current_user.id).fetchone()[0]
+#    print(count_select)
+#    print('user_select')
+#    i = 1
+#    while i < count_select:
+#        print(user_select[i].url_logo)
+#        logo = user_select[i].url_logo
+#        print('logo=', logo)
+#        print('i=', i)
+#        if logo != None:
+#            logo = uploads(logo)
+#            print('logo2=', logo)
+#            user_select[i].url_logo = uploads(logo)
+#            print(user_select[i].url_logo)
+#        i = i + 1
     return render_template('account.html', title='Управление кружками пользователя', user_select=user_select)
 
 #Страница регистрации пользователя из детских учреждений
@@ -113,6 +127,7 @@ def addclub():
             ages_from=form.ages_from.data,
             ages_to=form.ages_to.data
             )
+
         db.session.add(new_club)
         #Добавление тэгов для клуба в БД
         new_tags_list = format_tags(form.tags.data)
@@ -159,69 +174,23 @@ def addlogo():
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-<<<<<<< HEAD
-            file.save(os.path.join(app.config['UPLOAD_FOLDER_LOG'], filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         else:
             filename = 'logo-ghostbuster.jpg'
         last_id = db.engine.execute("SELECT MAX(id) FROM clubs").fetchone()[0]
         db.engine.execute("UPDATE clubs SET url_logo=:url_logo WHERE id = :id", id=last_id, url_logo=filename)
-<<<<<<< HEAD
-#        print('file=', filename)
+        print('file=', filename)
         uploads(filename)
-#        print('up_file=')
-        return render_template('addlogo.html')
-#        return redirect(url_for('account'))
+        print('up_file=')
+        return redirect(url_for('account'))
 #    else:
 #        print('222222222222')
 #        return render_template('addlogo.html')
 
-@app.route('/addphoto', methods=['GET', 'POST'])
-@login_required
-def addphoto():
-    if request.method == 'POST':
-        last_id = db.engine.execute("SELECT MAX(id) FROM clubs").fetchone()[0]
-        print('-------')
-        file1 = request.files['file1']
-        print('file1=', file1)
-        if file1 and allowed_file(file1.filename):
-            filename1 = secure_filename(file1.filename)
-            file1.save(os.path.join(app.config['UPLOAD_FOLDER_PHOTO'], filename1))
-        else:
-            filename1 = 'logo-ghostbuster.jpg'
-#        return render_template('addlogo.html')
-
-        file2 = request.files['file2']
-        if file2 and allowed_file(file2.filename):
-            filename2 = secure_filename(file2.filename)
-            file2.save(os.path.join(app.config['UPLOAD_FOLDER_PHOTO'], filename2))
-        else:
-            filename2 = 'logo-ghostbuster.jpg'
-
-        file3 = request.files['file3']
-        if file3 and allowed_file(file3.filename):
-            filename3 = secure_filename(file3.filename)
-            file3.save(os.path.join(app.config['UPLOAD_FOLDER_PHOTO'], filename3))
-        else:
-            filename3 = 'logo-ghostbuster.jpg'
-
-        db.engine.execute("""UPDATE clubs SET url_photo_1=:photo1, url_photo_2=:photo2, url_photo_3=:photo3 WHERE id = :id"""
-        , id=last_id, photo1=filename1, photo2=filename2, photo3=filename3)
-#        print('file=', filename)
-        photo(filename1)
-        photo(filename2)
-        photo(filename3)
-#        print('up_file=')
-        return redirect(url_for('account'))
-
 @app.route('/uploads/<filename>')
 def uploads(filename):
     print('upload')
-    return send_from_directory(app.config['UPLOAD_FOLDER_LOG'], filename)
-
-@app.route('/photo/<filename>')
-def photo(filename):
-    print('upload_photo')
-    return send_from_directory(app.config['UPLOAD_FOLDER_PHOTO'], filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @app.route('/editclub/<club_id>', methods=['GET'])
 @login_required
