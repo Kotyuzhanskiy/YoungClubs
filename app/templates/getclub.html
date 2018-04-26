@@ -3,7 +3,7 @@
 {% block content %}
             {% for item in club %}
             <h1><b></b> {{  item.name  }}</h1>
-            <p><b><img src="/uploads/{{item.url_logo}}" height="200" alt="Логотип"></p>
+            <p><b><img src="/uploads/{{ item.url_logo }}" height="200" alt="Логотип"></p>
             <p><b>Описание: </b> {{ item.description }}</p>
             <p><b>Учреждение: </b> {{ item.institution }}</p>
             <p><b>Преподаватель: </b> {{ item.leader }}</p>
@@ -15,5 +15,8 @@
             <p><b>Web: </b><a href="{{ item.web }}">{{ item.web }}</a></p>
             <p><b>E-mail: </b><a href=mailto:"{{ item.email }}">{{ item.email }}</a></p>
             <p><b>Страница в социальной сети: </b><a href="{{ item.social }}">{{ item.social }}</a></p>
+            <p><img src="/uploads/{{ item.url_photo_1 }}" height="400" alt="Фото_1"></p>
+            <p><img src="/uploads/{{ item.url_photo_2 }}" height="400" alt="Фото_2"></p>
+            <p><img src="/uploads/{{ item.url_photo_3 }}" height="400" alt="Фото_3"></p>
             {% endfor %}
 {% endblock %}

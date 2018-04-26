@@ -12,8 +12,8 @@ from pprint import pprint
 
 ###       ПОМЕНЯТЬ ПУТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-UPLOAD_FOLDER_LOG = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/logo/'
-UPLOAD_FOLDER_PHOTO = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/photo/'
+UPLOAD_FOLDER_LOG = '/home/ubuntu/workspace/YouthClubs/app/logo/'
+UPLOAD_FOLDER_PHOTO = '/home/ubuntu/workspace/YouthClubs/app/photo/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app.config['UPLOAD_FOLDER_LOG'] = UPLOAD_FOLDER_LOG
@@ -159,13 +159,11 @@ def addlogo():
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-<<<<<<< HEAD
             file.save(os.path.join(app.config['UPLOAD_FOLDER_LOG'], filename))
         else:
             filename = 'logo-ghostbuster.jpg'
         last_id = db.engine.execute("SELECT MAX(id) FROM clubs").fetchone()[0]
         db.engine.execute("UPDATE clubs SET url_logo=:url_logo WHERE id = :id", id=last_id, url_logo=filename)
-<<<<<<< HEAD
 #        print('file=', filename)
         uploads(filename)
 #        print('up_file=')
