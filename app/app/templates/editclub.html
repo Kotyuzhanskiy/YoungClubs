@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Здравствуйте {{ current_user.username }}! </h1>
+    <h2>Это запись, которую Вы выбрали</h2>
+    <form action="/updateclub" method="post">
+         <input type="hidden" name="id" value="{{ club.id }}">
+
+            <p>Учреждение
+                <input type="text" name="institution" value="{{ club.institution }}">
+            </p>
+            <p>Название_кружка
+                <input type="text" name="name" value="{{ club.name }}">
+            </p>
+
+            <p>Преподаватель
+                <input type="text" name="leader" value="{{ club.leader }}">
+            </p>
+            <p>Стоимость
+                <input type="text" name="price" value="{{ club.price }}">
+            </p>
+            <p>Краткое описание
+                <input type="text" name="snippet" value="{{ club.snippet }}">
+            </p>
+            <p>Полное описание
+                <input type="text" name="description" value="{{ club.description }}">
+            </p>
+            <p>Телефон
+                <input type="text" name="phone" value="{{ club.phone }}">
+            </p>
+            <p>Сайт
+                <input type="text" name="web" value="{{ club.web }}">
+            </p>
+            <p>Электронный адрес
+                <input type="text" name="email" value="{{ club.email }}">
+            </p>
+            <p>Страница в соц.сети
+                <input type="text" name="social" value="{{ club.social }}">
+            </p>
+            <p>Адрес
+                <input type="text" name="street" value="{{ club.street }}">
+                <input type="text" name="building" value="{{ club.building }}">
+                <input type="text" name="room" value="{{ club.room }}">
+            </p>
+            <p>Логотип
+                <input type="text" name="url_logo" value="{{ club.url_logo }}">
+            </p>
+
+       <input type="submit" value="Сохранить"></input>
+
+{% endblock %}

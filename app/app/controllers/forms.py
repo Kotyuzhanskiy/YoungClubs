@@ -170,7 +170,7 @@ class AddClubForm(FlaskForm):
         validators=[DataRequired()]
         )
  #  submit = SubmitField('Добавить кружок')
-#    submit = SubmitField('Добавить кружок')
+    submit = SubmitField('Добавить кружок')
     #hours = FieldList(FormField(OfficeHours), min_entries=1, max_entries=1, label = 'Время работы')
     #url_logo = FormField(UploadForm)
     #photos = FormField(UploadPhotoForm)

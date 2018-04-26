@@ -4,3 +4,5 @@ flask-sqlalchemy
 flask-migrate
 flask-login
 flask-uploads-0.2.1
+sudo apt-get install libicu-dev libsqlite3-dev
+wget "https://www.sqlite.org/src/raw/ext/icu/icu.c?name=b2732aef0b076e4276d9b39b5a33cec7a05e1413" -O icu.c
