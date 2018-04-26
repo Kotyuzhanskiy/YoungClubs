@@ -13,6 +13,7 @@ from pprint import pprint
 
 ###       ПОМЕНЯТЬ ПУТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+<<<<<<< HEAD
 UPLOAD_FOLDER_LOG = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/logo/'
 UPLOAD_FOLDER_PHOTO = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/photo/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -20,6 +21,12 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 app.config['UPLOAD_FOLDER_LOG'] = UPLOAD_FOLDER_LOG
 app.config['UPLOAD_FOLDER_PHOTO'] = UPLOAD_FOLDER_PHOTO
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+=======
+UPLOAD_FOLDER = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/logo/'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+>>>>>>> d25259931958628d77ab123e004d00fb28ecc921
 
 #Главная страница
 @app.route('/', methods=['GET', 'POST'])
@@ -73,6 +80,25 @@ def account():
     #выбор из clubs и institution. похожие названия колонок переименовывать "i.name as name_i"
     #user_select = db.engine.execute("SELECT c.*, i.name as name_i FROM clubs c INNER JOIN institutions i ON c.institution_id = i.id WHERE user_id = :user_id", user_id=current_user.id)
     user_select = db.engine.execute("SELECT * FROM clubs WHERE user_id = :user_id", user_id=current_user.id).fetchall()
+<<<<<<< HEAD
+=======
+    #кол-во выбранных записей
+#    count_select = db.engine.execute("SELECT COUNT(id) FROM clubs WHERE user_id = :user_id", user_id=current_user.id).fetchone()[0]
+#    print(count_select)
+#    print('user_select')
+#    i = 1
+#    while i < count_select:
+#        print(user_select[i].url_logo)
+#        logo = user_select[i].url_logo
+#        print('logo=', logo)
+#        print('i=', i)
+#        if logo != None:
+#            logo = uploads(logo)
+#            print('logo2=', logo)
+#            user_select[i].url_logo = uploads(logo)
+#            print(user_select[i].url_logo)
+#        i = i + 1
+>>>>>>> d25259931958628d77ab123e004d00fb28ecc921
     return render_template('account.html', title='Управление кружками пользователя', user_select=user_select)
 
 #Страница регистрации пользователя из детских учреждений
@@ -161,20 +187,32 @@ def addlogo():
         file = request.files['file']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+<<<<<<< HEAD
             file.save(os.path.join(app.config['UPLOAD_FOLDER_LOG'], filename))
+=======
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+>>>>>>> d25259931958628d77ab123e004d00fb28ecc921
         else:
             filename = 'logo-ghostbuster.jpg'
         last_id = db.engine.execute("SELECT MAX(id) FROM clubs").fetchone()[0]
         db.engine.execute("UPDATE clubs SET url_logo=:url_logo WHERE id = :id", id=last_id, url_logo=filename)
+<<<<<<< HEAD
 #        print('file=', filename)
         uploads(filename)
 #        print('up_file=')
         return render_template('addlogo.html')
 #        return redirect(url_for('account'))
+=======
+        print('file=', filename)
+        uploads(filename)
+        print('up_file=')
+        return redirect(url_for('account'))
+>>>>>>> d25259931958628d77ab123e004d00fb28ecc921
 #    else:
 #        print('222222222222')
 #        return render_template('addlogo.html')
 
+<<<<<<< HEAD
 @app.route('/addphoto', methods=['GET', 'POST'])
 @login_required
 def addphoto():
@@ -222,6 +260,12 @@ def uploads(filename):
 def photo(filename):
     print('upload_photo')
     return send_from_directory(app.config['UPLOAD_FOLDER_PHOTO'], filename)
+=======
+@app.route('/uploads/<filename>')
+def uploads(filename):
+    print('upload')
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+>>>>>>> d25259931958628d77ab123e004d00fb28ecc921
 
 @app.route('/editclub/<club_id>', methods=['GET'])
 @login_required
