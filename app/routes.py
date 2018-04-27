@@ -10,10 +10,11 @@ from app import db
 from app.controllers.fn import format_tags, format_form_list, SimpleSearch, SimpleSearch2
 from pprint import pprint
 
+
 ###       ПОМЕНЯТЬ ПУТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-UPLOAD_FOLDER_LOG = '/home/ubuntu/workspace/YouthClubs/app/logo/'
-UPLOAD_FOLDER_PHOTO = '/home/ubuntu/workspace/YouthClubs/app/photo/'
+UPLOAD_FOLDER_LOG = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/logo/'
+UPLOAD_FOLDER_PHOTO = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/photo/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app.config['UPLOAD_FOLDER_LOG'] = UPLOAD_FOLDER_LOG
@@ -113,6 +114,7 @@ def addclub():
             ages_from=form.ages_from.data,
             ages_to=form.ages_to.data
             )
+
         db.session.add(new_club)
         #Добавление тэгов для клуба в БД
         new_tags_list = format_tags(form.tags.data)
