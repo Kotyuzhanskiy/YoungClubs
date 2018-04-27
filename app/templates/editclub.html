@@ -1,51 +1,96 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Здравствуйте {{ current_user.username }}! </h1>
-    <h2>Это запись, которую Вы выбрали</h2>
-    <form action="/updateclub" method="post">
-         <input type="hidden" name="id" value="{{ club.id }}">
+    
+    
+    <div class="content" style="padding:0 50px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Здравствуйте {{ current_user.username }}! </h1>
+                <h2>Это запись, которую Вы выбрали</h2>
+                
+                <form class="form"  action="/updateclub" method="post">
+                    <input type="hidden" name="id" value="{{ club.id }}">
+                    <div class="row">
+                        <div class="col-md-4">
+                            
+                            <div class="form-group">
+                                <label for="institution">Учреждение</label>
+                                <input type="text" id="institution" name="institution" value="{{ club.institution }}" placeholder="Учреждение" class="form-control" >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="name">Название кружка</label>
+                                <input type="text" id="name" name="name" value="{{ club.name }}" placeholder="Название кружка" class="form-control" >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="leader">Преподаватель</label>
+                                <input type="text" id="leader" name="leader" value="{{ club.leader }}" placeholder="Преподаватель" class="form-control" >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="leader">Стоимость</label>
+                                <input type="text" id="price" name="price" value="{{ club.price }}" placeholder="Стоимость" class="form-control" >
+                            </div>
+                            
+                            
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="snippet">Краткое описание</label>
+                                <input type="text" id="snippet" name="snippet" value="{{ club.snippet }}" placeholder="Краткое описание" class="form-control" >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="description">Полное описание</label>
+                                <input type="text" id="description" name="description" value="{{ club.description }}" placeholder="Полное описание" class="form-control" >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone">Телефон</label>
+                                <input type="text" id="phone" name="phone" value="{{ club.phone }}" placeholder="Телефон" class="form-control" >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="web">Сайт</label>
+                                <input type="text" id="web" name="web" value="{{ club.web }}" placeholder="Сайт" class="form-control" >
+                            </div>
+                            
+                            
+                        </div>
+                        
+                        <div class="col-md-4">
+                            
+                            <div class="form-group">
+                                <label for="email">Электронный адрес</label>
+                                <input type="text" id="email" name="email" value="{{ club.email }}" placeholder="Электронный адрес" class="form-control" >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="social">Страница в соц.сети</label>
+                                <input type="text" id="social" name="social" value="{{ club.social }}" placeholder="Страница в соц.сети" class="form-control" >
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="street">Улица</label>
+                                <input type="text" id="street" name="street" value="{{ club.street }}" placeholder="Улица" class="form-control" >
+                                
+                                <label for="building">Дом</label>
+                                <input type="text" id="building" name="building" value="{{ club.building }}" placeholder="Дом" class="form-control" >
+                                
+                                <label for="room">Комната</label>
+                                <input type="text" id="room" name="room" value="{{ club.room }}" placeholder="Комната" class="form-control" >
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="float: right;">Сохранить</button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
 
-            <p>Учреждение
-                <input type="text" name="institution" value="{{ club.institution }}">
-            </p>
-            <p>Название_кружка
-                <input type="text" name="name" value="{{ club.name }}">
-            </p>
-
-            <p>Преподаватель
-                <input type="text" name="leader" value="{{ club.leader }}">
-            </p>
-            <p>Стоимость
-                <input type="text" name="price" value="{{ club.price }}">
-            </p>
-            <p>Краткое описание
-                <input type="text" name="snippet" value="{{ club.snippet }}">
-            </p>
-            <p>Полное описание
-                <input type="text" name="description" value="{{ club.description }}">
-            </p>
-            <p>Телефон
-                <input type="text" name="phone" value="{{ club.phone }}">
-            </p>
-            <p>Сайт
-                <input type="text" name="web" value="{{ club.web }}">
-            </p>
-            <p>Электронный адрес
-                <input type="text" name="email" value="{{ club.email }}">
-            </p>
-            <p>Страница в соц.сети
-                <input type="text" name="social" value="{{ club.social }}">
-            </p>
-            <p>Адрес
-                <input type="text" name="street" value="{{ club.street }}">
-                <input type="text" name="building" value="{{ club.building }}">
-                <input type="text" name="room" value="{{ club.room }}">
-            </p>
-            <p>Логотип
-                <input type="text" name="url_logo" value="{{ club.url_logo }}">
-            </p>
-
-       <input type="submit" value="Сохранить"></input>
-
+    
 {% endblock %}

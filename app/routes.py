@@ -11,10 +11,9 @@ from app.controllers.fn import format_tags, format_form_list, SimpleSearch, Simp
 from pprint import pprint
 
 
-###       ПОМЕНЯТЬ ПУТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-UPLOAD_FOLDER_LOG = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/logo/'
-UPLOAD_FOLDER_PHOTO = '/home/ubuntu/workspace/Final/clubs_other/YouthClubs/app/photo/'
+### ПОМЕНЯТЬ ПУТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+UPLOAD_FOLDER_LOG = '/home/ubuntu/workspace/YouthClubs/app/logo/'
+UPLOAD_FOLDER_PHOTO = '/home/ubuntu/workspace/YouthClubs/app/photo/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 app.config['UPLOAD_FOLDER_LOG'] = UPLOAD_FOLDER_LOG

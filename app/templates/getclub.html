@@ -15,8 +15,8 @@
             <p><b>Web: </b><a href="{{ item.web }}">{{ item.web }}</a></p>
             <p><b>E-mail: </b><a href=mailto:"{{ item.email }}">{{ item.email }}</a></p>
             <p><b>Страница в социальной сети: </b><a href="{{ item.social }}">{{ item.social }}</a></p>
-            <p><img src="/uploads/{{ item.url_photo_1 }}" height="400" alt="Фото_1"></p>
-            <p><img src="/uploads/{{ item.url_photo_2 }}" height="400" alt="Фото_2"></p>
-            <p><img src="/uploads/{{ item.url_photo_3 }}" height="400" alt="Фото_3"></p>
+            <p><img src="/photo/{{ item.url_photo_1 }}" height="400" alt="Фото_1"></p>
+            <p><img src="/photo/{{ item.url_photo_2 }}" height="400" alt="Фото_2"></p>
+            <p><img src="/photo/{{ item.url_photo_3 }}" height="400" alt="Фото_3"></p>
             {% endfor %}
 {% endblock %}
