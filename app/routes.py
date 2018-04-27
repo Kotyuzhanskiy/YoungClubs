@@ -10,8 +10,8 @@ from app import db
 from app.controllers.fn import format_tags, format_form_list, SimpleSearch, SimpleSearch2
 from pprint import pprint
 
-###       ПОМЕНЯТЬ ПУТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+### ПОМЕНЯТЬ ПУТЬ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 UPLOAD_FOLDER_LOG = '/home/ubuntu/workspace/YouthClubs/app/logo/'
 UPLOAD_FOLDER_PHOTO = '/home/ubuntu/workspace/YouthClubs/app/photo/'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
@@ -113,6 +113,7 @@ def addclub():
             ages_from=form.ages_from.data,
             ages_to=form.ages_to.data
             )
+
         db.session.add(new_club)
         #Добавление тэгов для клуба в БД
         new_tags_list = format_tags(form.tags.data)
@@ -264,9 +265,6 @@ def updateclub():
 @app.route('/club/<club_id>', methods=['GET'])
 def getclub(club_id):
     club = db.session.query(Club).filter(Club.id == club_id).all()
-    for i in club:
-        pprint(i)
     #club_ages = AgeSearch(club_id)
     #club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
     return render_template('getclub.html', title='Информация о кружке', club=club)
-
