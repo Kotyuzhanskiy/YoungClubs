@@ -1,21 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% if n != 0 %}
-    <h1>Результаты поиска кружков по запросу "{{ search_value }}":</h1>
-        {% for club in clubs_search_results %}
-            <h1><b></b><a href="/club/{{ club.id }}">"{{ club.name }}"</a></h1>
-            <p><b><img src="/uploads/{{club.url_logo}}" height="100" alt="Логотип"></p>
-            <p><b>{{ club.snippet }}</p>
-            <p><b>г. Краматорск, ул. {{ club.street }}, {{ club.building }}, кабинет {{ club.room }} </p>
-            <p><b>Возраст: от</b> {{ club.ages_from }} до {{ club.ages_to }} лет</p>
-            <p><b>Преподаватель:</b> {{ club.leader }}</p>
-            <p><b>Телефон:</b> {{ club.phone }}</p>
-            <p><b>подробнее о </b><a href="/club/{{ club.id }}">"{{ club.name }}"</a></p>
-        {% endfor %}
-    {% else %}
-        <p>К сожалению, по Вашему запросу "{{ search_value }}" ничего не найдено</p>
-        <p>Попробуйте изменить параметры поиска</p>
-        <p><a href="index">Вернуться к поиску</a></p>
-    {% endif %}
+    <div class="content" style="padding: 0 50px;">
+        <div class="row">
+            <div class="col-md-12">
+                {% if n != 0 %}
+                <h1>Результаты поиска кружков по запросу "{{ search_value }}":</h1>
+                    {% for club in clubs_search_results %}
+                        <div class="row" style="border-bottom: 1px solid #aaa;">
+                            <div class="col-md-12">
+                                <h3><a href="/club/{{ club.id }}">"{{ club.name }}"</a></h3>
+                            </div>
+                            <div class="col-md-3">
+                                <img src="/uploads/{{club.url_logo}}" alt="Логотип" style="width:100%; height: auto;">
+                            </div>
+                            <div class="col-md-9">
+                                <p><b>Описание:</b> {{ club.snippet }}</p>
+                                <p><b>Адрес:</b> г. Краматорск, ул. {{ club.street }}, {{ club.building }}, кабинет {{ club.room }} </p>
+                                <p><b>Возраст:</b> от {{ club.ages_from }} до {{ club.ages_to }} лет</p>
+                                <p><b>Преподаватель:</b> {{ club.leader }}</p>
+                                <p><b>Телефон:</b> {{ club.phone }}</p>
+                            </div>
+                            
+                        </div>
+                    
+                    {% endfor %}
+                {% else %}
+                    <p>К сожалению, по Вашему запросу "{{ search_value }}" ничего не найдено</p>
+                    <p>Попробуйте изменить параметры поиска</p>
+                    <p><a href="index">Вернуться к поиску</a></p>
+                {% endif %}
+            </div>
+            
+            
+        </div>
+    </div>
+
+    
 {% endblock %}

@@ -1,16 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form action="/search" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.search.label }}<br>
-            {{ form.search(size=48) }}<br>
-            {{ form.search.description }}<br>
-            {% for error in form.search.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+    <div class="container container-height d-flex justify-content-center flex-column align-items-center">
+        <div class="row">
+            <div class="col-12">
+                <h1>Моему ребенку интересны</h1>
+                <form class="form" action="/search" method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        <input type="text" size="100" name="search" placeholder="....например 'танцы'" class="form-control" >
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary"> Найти кружки</button>
+                </form>
+                
+                
+            </div>
+        </div>
+    </div>
 {% endblock %}

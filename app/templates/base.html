@@ -1,29 +1,69 @@
-<html>
-    <head>
-      {% if title %}
-      <title>{{ title }} - Youth Clubs</title>
-      {% else %}
-      <title>Youth Clubs</title>
-      {% endif %}
-    </head>
-    <body>
-        <div>
-        <a href="{{ url_for('index') }}">Родителям</a>
-        <a href="{{ url_for('login') }}">Учреждениям</a>
-        {% if current_user.is_anonymous == false %}
-            <a href="{{ url_for('logout') }}">Выйти</a>
-        {% else %}
-        {% endif %}
+<!doctype html>
+<html lang="ru">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% if title %}
+    <title>{{ title }} - Youth Clubs</title>
+    {% else %}
+    <title>Youth Clubs</title>
+    {% endif %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'style.css') }}">
+</head>
+<body class="body-back-main">
+    <div class="content">
+        <div class="row">
+            <div class="col-md-12">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+            </div>
         </div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-    </body>
+        
+        <header>
+            <div class="row">
+                <div class="col-md-12">
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                      <a class="navbar-brand" href="#">Детские<br>кружки</a>
+                      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                      </button>
+                    
+                      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                          <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('index') }}">Родителям</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Учреждениям</a>
+                          </li>
+                          {% if current_user.is_anonymous == false %}
+                          <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">Выйти</a>
+                          </li>
+                          {% else %}{% endif %}
+                        </ul>
+                        
+                      </div>
+                    </nav>
+                    
+                </div>
+            </div>
+        </header>
+        
+        <!-- page content -->
+        <div class="row">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+</body>
 </html>
