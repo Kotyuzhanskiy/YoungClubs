@@ -264,6 +264,8 @@ def updateclub():
 @app.route('/club/<club_id>', methods=['GET'])
 def getclub(club_id):
     club = db.session.query(Club).filter(Club.id == club_id).all()
+    for i in club:
+        pprint(i)
     #club_ages = AgeSearch(club_id)
     #club = db.engine.execute("SELECT * FROM clubs WHERE id = :club_id", club_id = club_id).fetchall()[0]
     return render_template('getclub.html', title='Информация о кружке', club=club)
